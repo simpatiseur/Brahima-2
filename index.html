@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Chambre de Métiers de Dabou</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;background:#f0f4f8;color:#1a3c5e}
+
+/* ===== SPLASH ===== */
+#splash{position:fixed;inset:0;background:#0a1628;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;transition:opacity .8s ease,visibility .8s ease;}
+#splash.hidden{opacity:0;visibility:hidden;pointer-events:none;}
+.splash-header{text-align:center;margin-bottom:28px;animation:fadeInDown .8s ease forwards;}
+.splash-header .splash-icon{font-size:3rem;display:block;margin-bottom:8px;}
+.splash-header h1{color:#fff;font-size:1.4rem;font-weight:700;letter-spacing:.05em;margin:0;}
+.splash-header p{color:#f59e0b;font-size:.8rem;margin:4px 0 0;letter-spacing:.1em;text-transform:uppercase;}
+.photo-carousel{position:relative;width:260px;height:320px;margin:0 auto 18px;}
+.photo-slide{position:absolute;inset:0;border-radius:16px;overflow:hidden;opacity:0;transform:scale(.92) translateY(20px);transition:opacity .7s ease,transform .7s ease;box-shadow:0 20px 60px rgba(0,0,0,.6);border:3px solid rgba(245,158,11,.4);}
+.photo-slide.active{opacity:1;transform:scale(1) translateY(0);}
+.photo-slide.exit{opacity:0;transform:scale(1.05) translateY(-20px);}
+.photo-slide img{width:100%;height:100%;object-fit:cover;object-position:center top;}
+.photo-slide::after{content:'';position:absolute;bottom:0;left:0;right:0;height:80px;background:linear-gradient(to top,rgba(10,22,40,.85),transparent);}
+.carousel-dots{display:flex;gap:6px;justify-content:center;margin-bottom:16px;}
+.carousel-dots span{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.3);transition:background .3s,transform .3s;}
+.carousel-dots span.active{background:#f59e0b;transform:scale(1.3);}
+.ticker-wrapper{width:100%;overflow:hidden;background:rgba(245,158,11,.12);border-top:1px solid rgba(245,158,11,.3);border-bottom:1px solid rgba(245,158,11,.3);padding:10px 0;}
+.ticker-track{display:flex;animation:ticker-scroll 22s linear infinite;white-space:nowrap;}
+.ticker-item{display:inline-flex;align-items:center;gap:8px;padding:0 28px;color:#f8d87a;font-size:.88rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;}
+.ticker-item::before{content:'⚒';font-size:1rem;opacity:.8;}
+@keyframes ticker-scroll{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+.splash-progress-bar{width:200px;height:3px;background:rgba(255,255,255,.1);border-radius:99px;margin:18px auto 0;overflow:hidden;}
+.splash-progress-fill{height:100%;background:linear-gradient(90deg,#f59e0b,#fde68a);border-radius:99px;width:0%;animation:progress-fill 22s linear forwards;}
+@keyframes progress-fill{to{width:100%;}}
+.splash-skip{position:absolute;top:16px;right:16px;background:rgba(255,255,255,.1);color:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:6px 14px;font-size:.75rem;cursor:pointer;transition:background .2s;}
+.splash-skip:hover{background:rgba(255,255,255,.2);}
+@keyframes fadeInDown{from{opacity:0;transform:translateY(-20px);}to{opacity:1;transform:translateY(0);}}
+
+/* ===== APP ===== */
+header{background:linear-gradient(135deg,#1a3c5e,#2563eb);color:#fff;padding:20px;text-align:center;box-shadow:0 4px 12px rgba(0,0,0,.2);}
+header h1{font-size:1.6rem;margin-bottom:4px;}
+header p{font-size:.85rem;opacity:.85;}
+.stats{display:flex;flex-wrap:wrap;gap:12px;padding:16px;justify-content:center;}
+.stat-card{background:#fff;border-radius:12px;padding:14px 20px;text-align:center;min-width:120px;box-shadow:0 2px 8px rgba(0,0,0,.08);flex:1;}
+.stat-card .val{font-size:2rem;font-weight:700;color:#2563eb;}
+.stat-card .lbl{font-size:.75rem;color:#64748b;margin-top:2px;}
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;padding:0 16px 16px;align-items:center;}
+.toolbar input,.toolbar select{flex:1;min-width:150px;padding:10px 14px;border:1px solid #cbd5e1;border-radius:8px;font-size:.9rem;background:#fff;}
+.btn{padding:10px 18px;border:none;border-radius:8px;cursor:pointer;font-size:.9rem;font-weight:600;transition:all .2s;}
+.btn-primary{background:#2563eb;color:#fff;}.btn-primary:hover{background:#1d4ed8;}
+.btn-success{background:#16a34a;color:#fff;}.btn-success:hover{background:#15803d;}
+.btn-danger{background:#dc2626;color:#fff;padding:6px 12px;font-size:.8rem;}.btn-danger:hover{background:#b91c1c;}
+.btn-edit{background:#f59e0b;color:#fff;padding:6px 12px;font-size:.8rem;}.btn-edit:hover{background:#d97706;}
+.btn-view{background:#7c3aed;color:#fff;padding:6px 12px;font-size:.8rem;}.btn-view:hover{background:#6d28d9;}
+.table-wrap{overflow-x:auto;padding:0 16px 16px;}
+table{width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.08);font-size:.85rem;}
+th{background:#1a3c5e;color:#fff;padding:12px 10px;text-align:left;white-space:nowrap;}
+td{padding:10px;border-bottom:1px solid #f1f5f9;vertical-align:middle;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:#f8fafc;}
+.badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:.75rem;font-weight:600;}
+.badge-actif{background:#dcfce7;color:#16a34a;}
+.badge-inactif{background:#fee2e2;color:#dc2626;}
+.avatar{width:50px;height:50px;border-radius:50%;object-fit:cover;border:2px solid #e2e8f0;}
+.avatar-placeholder{width:50px;height:50px;border-radius:50%;background:#e2e8f0;display:flex;align-items:center;justify-content:center;font-size:1.3rem;}
+.empty-row td{text-align:center;color:#94a3b8;padding:30px;}
+.action-btns{display:flex;gap:5px;flex-wrap:wrap;}
+
+/* ===== MODAL FORMULAIRE ===== */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;overflow-y:auto;padding:20px;}
+.modal-bg.open{display:flex;align-items:flex-start;justify-content:center;}
+.modal{background:#fff;border-radius:16px;padding:24px;width:100%;max-width:560px;box-shadow:0 20px 60px rgba(0,0,0,.3);}
+.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;}
+.modal-header h2{font-size:1.2rem;color:#1a3c5e;}
+.close-btn{background:none;border:none;font-size:1.5rem;cursor:pointer;color:#64748b;line-height:1;}
+.form-section{background:#f8fafc;border-radius:10px;padding:14px;margin-bottom:14px;}
+.form-section h3{font-size:.8rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.05em;margin-bottom:12px;}
+.form-row{display:flex;gap:10px;flex-wrap:wrap;}
+.form-group{display:flex;flex-direction:column;gap:5px;flex:1;min-width:140px;}
+label{font-size:.8rem;font-weight:600;color:#374151;}
+input,select,textarea{padding:9px 12px;border:1px solid #cbd5e1;border-radius:8px;font-size:.9rem;width:100%;}
+input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.1);}
+.photo-zone{border:2px dashed #cbd5e1;border-radius:10px;padding:16px;text-align:center;cursor:pointer;color:#64748b;font-size:.85rem;transition:border-color .2s;}
+.photo-zone:hover{border-color:#2563eb;}
+canvas{border:1px solid #e2e8f0;border-radius:8px;width:100%;cursor:crosshair;touch-action:none;}
+.modal-footer{display:flex;gap:10px;justify-content:flex-end;margin-top:16px;}
+
+/* ===== CARTE ARTISAN ===== */
+#card-bg{display:none;position:fixed;inset:0;background:rgba(10,22,40,.82);backdrop-filter:blur(8px);z-index:3000;align-items:center;justify-content:center;padding:16px;overflow-y:auto;}
+#card-bg.open{display:flex;}
+.artisan-card{background:#fff;border-radius:24px;width:100%;max-width:400px;overflow:hidden;box-shadow:0 40px 100px rgba(0,0,0,.5);animation:cardIn .35s cubic-bezier(.34,1.56,.64,1) forwards;margin:auto;}
+@keyframes cardIn{from{opacity:0;transform:scale(.85) translateY(40px);}to{opacity:1;transform:scale(1) translateY(0);}}
+
+.card-top{background:linear-gradient(135deg,#1a3c5e 0%,#2563eb 100%);padding:24px 20px 54px;text-align:center;position:relative;}
+.card-top-label{font-size:.65rem;color:rgba(255,255,255,.65);letter-spacing:.14em;text-transform:uppercase;margin-bottom:4px;}
+.card-top-title{color:#fff;font-size:1rem;font-weight:700;}
+.card-close-btn{position:absolute;top:12px;right:14px;background:rgba(255,255,255,.15);border:none;color:#fff;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:background .2s;}
+.card-close-btn:hover{background:rgba(255,255,255,.3);}
+
+.card-photo-outer{text-align:center;margin-top:-46px;margin-bottom:10px;position:relative;display:inline-block;left:50%;transform:translateX(-50%);}
+.card-photo-outer img,.card-photo-ph{width:92px;height:92px;border-radius:50%;object-fit:cover;border:4px solid #fff;box-shadow:0 6px 24px rgba(0,0,0,.2);background:#e2e8f0;display:flex;align-items:center;justify-content:center;font-size:2.2rem;}
+.card-status-dot{position:absolute;bottom:4px;right:4px;width:18px;height:18px;border-radius:50%;border:3px solid #fff;}
+.dot-actif{background:#16a34a;}.dot-inactif{background:#dc2626;}
+
+.card-body{padding:12px 20px 0;}
+.card-name{text-align:center;font-size:1.3rem;font-weight:800;color:#1a3c5e;margin-bottom:2px;}
+.card-metier-txt{text-align:center;font-size:.88rem;color:#2563eb;font-weight:600;margin-bottom:6px;}
+.card-immat-badge{text-align:center;margin-bottom:14px;}
+.card-immat-badge span{font-size:.75rem;color:#64748b;background:#f1f5f9;display:inline-block;padding:3px 10px;border-radius:20px;}
+
+.card-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.cig{background:#f8fafc;border-radius:10px;padding:8px 10px;}
+.cig .ci-lbl{font-size:.65rem;color:#94a3b8;text-transform:uppercase;letter-spacing:.08em;margin-bottom:2px;}
+.cig .ci-val{font-size:.82rem;font-weight:600;color:#1a3c5e;word-break:break-word;}
+
+.card-sig-wrap{background:#f8fafc;border-radius:10px;padding:8px 10px;margin-bottom:14px;}
+.card-sig-wrap .ci-lbl{font-size:.65rem;color:#94a3b8;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px;}
+
+/* Boutons de la carte */
+.card-actions{padding:0 16px;display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
+.card-actions-bottom{padding:0 16px 18px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
+.card-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:13px 6px;border:none;border-radius:14px;cursor:pointer;font-size:.72rem;font-weight:700;letter-spacing:.02em;transition:transform .15s,box-shadow .15s;text-decoration:none;color:#fff;}
+.card-btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,.18);}
+.card-btn:active{transform:translateY(0);}
+.card-btn .cb-icon{font-size:1.35rem;}
+.cbb-call{background:linear-gradient(135deg,#16a34a,#22c55e);}
+.cbb-wa{background:linear-gradient(135deg,#128C7E,#25D366);}
+.cbb-fb{background:linear-gradient(135deg,#1877F2,#42a5f5);}
+.cbb-print{background:linear-gradient(135deg,#475569,#64748b);}
+.cbb-share{background:linear-gradient(135deg,#f59e0b,#fbbf24);color:#fff;}
+.cbb-close{background:linear-gradient(135deg,#dc2626,#ef4444);}
+
+/* ===== IMPRESSION ===== */
+#print-zone{display:none;}
+@media print{
+  body>*:not(#print-zone){display:none!important;}
+  #print-zone{display:block!important;font-family:system-ui,sans-serif;padding:24px;max-width:400px;margin:auto;border:2px solid #1a3c5e;border-radius:12px;}
+}
+</style>
+</head>
+<body>
+
+<!-- SPLASH -->
+<div id="splash">
+  <button class="splash-skip" onclick="closeSplash()">Passer ✕</button>
+  <div class="splash-header">
+    <span class="splash-icon">⚒️</span>
+    <h1>Chambre de Métiers de Dabou</h1>
+    <p>Annuaire Officiel des Artisans · Côte d'Ivoire</p>
+  </div>
+  <div class="photo-carousel" id="photoCarousel"></div>
+  <div class="carousel-dots" id="carouselDots"></div>
+  <div class="ticker-wrapper"><div class="ticker-track" id="tickerTrack"></div></div>
+  <div class="splash-progress-bar"><div class="splash-progress-fill"></div></div>
+</div>
+
+<!-- APP -->
+<header>
+  <div style="font-size:2rem">⚒️</div>
+  <h1>Chambre de Métiers de Dabou</h1>
+  <p>Annuaire Officiel des Artisans · République de Côte d'Ivoire · Région des Grands Ponts</p>
+</header>
+
+<div class="stats">
+  <div class="stat-card"><div class="val" id="s-total">0</div><div class="lbl">Artisans</div></div>
+  <div class="stat-card"><div class="val" id="s-metiers">0</div><div class="lbl">Métiers</div></div>
+  <div class="stat-card"><div class="val" id="s-apprentis">0</div><div class="lbl">Apprentis totaux</div></div>
+  <div class="stat-card"><div class="val" id="s-actifs">0</div><div class="lbl">Actifs</div></div>
+</div>
+
+<div class="toolbar">
+  <input id="search" type="text" placeholder="🔍 Rechercher un artisan..." oninput="renderTable()"/>
+  <select id="filter-metier" onchange="renderTable()"><option value="">🔨 Tous les métiers</option></select>
+  <select id="filter-statut" onchange="renderTable()">
+    <option value="">● Tous statuts</option>
+    <option>Actif</option><option>Inactif</option>
+  </select>
+  <button class="btn btn-primary" onclick="openModal()">➕ Ajouter un artisan</button>
+  <button class="btn btn-success" onclick="exportCSV()">⬇️ Exporter CSV</button>
+</div>
+
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>N°</th><th>📷</th><th>👤 Nom</th><th>🪪 Immat.</th>
+        <th>🪪 CNI</th><th>🔨 Métier</th><th>🏭 Branche</th><th>🎓 Certif.</th>
+        <th>👥 App.</th><th>⚧</th><th>📞 Tél.</th><th>📍 Adresse</th>
+        <th>🗓️ Inscript.</th><th>● Statut</th><th>✍️ Signature</th><th>⚙️ Actions</th>
+      </tr>
+    </thead>
+    <tbody id="tbody"><tr class="empty-row"><td colspan="16">Aucun artisan enregistré</td></tr></tbody>
+  </table>
+</div>
+
+<!-- MODAL FORMULAIRE -->
+<div class="modal-bg" id="modal-bg">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="modal-title">➕ Ajouter un artisan</h2>
+      <button class="close-btn" onclick="closeModal()">✕</button>
+    </div>
+    <div class="form-section">
+      <h3>📷 Photo</h3>
+      <div class="photo-zone" onclick="document.getElementById('photo-input').click()" id="photo-preview">📷 Appuyer pour choisir une photo</div>
+      <input type="file" id="photo-input" accept="image/*" style="display:none" onchange="previewPhoto(event)"/>
+    </div>
+    <div class="form-section">
+      <h3>👤 Identité</h3>
+      <div class="form-row">
+        <div class="form-group" style="flex:2"><label>Nom & Prénom *</label><input id="f-nom" type="text" placeholder="Ex: Kouassi Jean"/></div>
+        <div class="form-group"><label>Sexe</label><select id="f-sexe"><option value="">-- Choisir --</option><option>Masculin</option><option>Féminin</option></select></div>
+      </div>
+      <div class="form-row" style="margin-top:10px">
+        <div class="form-group"><label>🪪 N° Immatriculation</label><input id="f-immat" type="text" placeholder="Ex: DAB-2024-001"/></div>
+        <div class="form-group"><label>🪪 N° CNI</label><input id="f-cni" type="text" placeholder="Ex: CI-12345678"/></div>
+      </div>
+    </div>
+    <div class="form-section">
+      <h3>🔨 Activité professionnelle</h3>
+      <div class="form-row">
+        <div class="form-group"><label>Métier *</label><input id="f-metier" type="text" placeholder="Ex: Menuisier"/></div>
+        <div class="form-group"><label>Branche d'activité</label><input id="f-branche" type="text" placeholder="Ex: Bâtiment & Travaux"/></div>
+      </div>
+      <div class="form-row" style="margin-top:10px">
+        <div class="form-group"><label>🎓 Certification / Diplôme</label><input id="f-certif" type="text" placeholder="Ex: CAP Menuiserie"/></div>
+        <div class="form-group"><label>👥 Nombre d'apprentis</label><input id="f-apprentis" type="number" min="0" placeholder="0"/></div>
+      </div>
+    </div>
+    <div class="form-section">
+      <h3>📞 Contact & Localisation</h3>
+      <div class="form-row">
+        <div class="form-group"><label>Téléphone *</label><input id="f-tel" type="tel" placeholder="Ex: 07 00 00 00 00"/></div>
+        <div class="form-group" style="flex:2"><label>Adresse / Domicile</label><input id="f-adresse" type="text" placeholder="Ex: Quartier Dioulabougou, Dabou"/></div>
+      </div>
+    </div>
+    <div class="form-section">
+      <h3>🗓️ Informations administratives</h3>
+      <div class="form-row">
+        <div class="form-group"><label>Date d'inscription</label><input id="f-date" type="date"/></div>
+        <div class="form-group"><label>● Statut</label><select id="f-statut"><option>Actif</option><option>Inactif</option></select></div>
+      </div>
+    </div>
+    <div class="form-section">
+      <h3>✍️ Signature</h3>
+      <canvas id="sig-canvas" width="500" height="120"></canvas>
+      <button type="button" class="btn" style="margin-top:8px;background:#f1f5f9;color:#374151" onclick="clearSig()">🗑️ Effacer la signature</button>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" style="background:#f1f5f9;color:#374151" onclick="closeModal()">Annuler</button>
+      <button class="btn btn-primary" onclick="saveArtisan()">💾 Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- CARTE ARTISAN -->
+<div id="card-bg" onclick="handleCardBgClick(event)">
+  <div class="artisan-card" id="artisan-card">
+
+    <div class="card-top">
+      <div class="card-top-label">⚒️ Chambre de Métiers de Dabou</div>
+      <div class="card-top-title">Carte Officielle d'Artisan · Côte d'Ivoire</div>
+      <button class="card-close-btn" onclick="closeCard()">✕</button>
+    </div>
+
+    <div style="text-align:center;padding-top:0">
+      <div class="card-photo-outer" id="card-photo-outer">
+        <div class="card-photo-ph" id="card-photo-inner">👤</div>
+        <div class="card-status-dot dot-actif" id="card-dot"></div>
+      </div>
+    </div>
+
+    <div class="card-body">
+      <div class="card-name" id="card-name">—</div>
+      <div class="card-metier-txt" id="card-metier">—</div>
+      <div class="card-immat-badge"><span id="card-immat">—</span></div>
+
+      <div class="card-info-grid">
+        <div class="cig"><div class="ci-lbl">🪪 N° CNI</div><div class="ci-val" id="card-cni">—</div></div>
+        <div class="cig"><div class="ci-lbl">🏭 Branche</div><div class="ci-val" id="card-branche">—</div></div>
+        <div class="cig"><div class="ci-lbl">🎓 Certification</div><div class="ci-val" id="card-certif">—</div></div>
+        <div class="cig"><div class="ci-lbl">👥 Apprentis</div><div class="ci-val" id="card-apprentis">—</div></div>
+        <div class="cig"><div class="ci-lbl">⚧ Sexe</div><div class="ci-val" id="card-sexe">—</div></div>
+        <div class="cig"><div class="ci-lbl">🗓️ Inscription</div><div class="ci-val" id="card-date">—</div></div>
+        <div class="cig" style="grid-column:span 2"><div class="ci-lbl">📍 Adresse</div><div class="ci-val" id="card-adresse">—</div></div>
+      </div>
+
+      <div class="card-sig-wrap">
+        <div class="ci-lbl">✍️ Signature</div>
+        <div id="card-sig-content"><span style="font-size:.8rem;color:#cbd5e1;font-style:italic">Aucune signature</span></div>
+      </div>
+    </div>
+
+    <!-- Ligne 1 : Appeler + WhatsApp -->
+    <div class="card-actions">
+      <a class="card-btn cbb-call" id="card-btn-call" href="#"><span class="cb-icon">📞</span>Appeler</a>
+      <a class="card-btn cbb-wa"   id="card-btn-wa"   href="#" target="_blank" rel="noopener"><span class="cb-icon">💬</span>WhatsApp</a>
+    </div>
+
+    <!-- Ligne 2 : Facebook + Imprimer -->
+    <div class="card-actions" style="margin-bottom:10px;">
+      <a class="card-btn cbb-fb" href="https://www.facebook.com/" target="_blank" rel="noopener"><span class="cb-icon">📘</span>Facebook</a>
+      <button class="card-btn cbb-print" onclick="printCard()"><span class="cb-icon">🖨️</span>Imprimer</button>
+    </div>
+
+    <!-- Ligne 3 : Partager + Fermer -->
+    <div class="card-actions" style="padding-bottom:18px;">
+      <button class="card-btn cbb-share" onclick="shareCard()"><span class="cb-icon">🔗</span>Partager</button>
+      <button class="card-btn cbb-close" onclick="closeCard()"><span class="cb-icon">✕</span>Fermer</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- Zone d'impression -->
+<div id="print-zone"></div>
+
+<script>
+/* ===== SPLASH ===== */
+const splashArtisans=[
+  {url:'https://images.unsplash.com/photo-1565071559227-20ab5e04d462?w=600&q=80',metier:'Menuisier'},
+  {url:'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&q=80',metier:'Maçon'},
+  {url:'https://images.unsplash.com/photo-1621905251918-48416bd8575a?w=600&q=80',metier:'Électricien'},
+  {url:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80',metier:'Soudeur'},
+  {url:'https://images.unsplash.com/photo-1556742031-c6961e8560b0?w=600&q=80',metier:'Coiffeuse'},
+  {url:'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&q=80',metier:'Couturier'},
+  {url:'https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&q=80',metier:'Plombier'},
+  {url:'https://images.unsplash.com/photo-1591881371726-d32ce61b78dc?w=600&q=80',metier:'Peintre'},
+  {url:'https://images.unsplash.com/photo-1529736576495-1ed4a29ca7e7?w=600&q=80',metier:'Tisserand'},
+  {url:'https://images.unsplash.com/photo-1606761568499-6d2451b23c66?w=600&q=80',metier:'Mécanicien'}
+];
+
+const carouselEl=document.getElementById('photoCarousel');
+const dotsEl=document.getElementById('carouselDots');
+const tickerEl=document.getElementById('tickerTrack');
+
+splashArtisans.forEach((art,i)=>{
+  const s=document.createElement('div');
+  s.className='photo-slide'+(i===0?' active':'');
+  s.innerHTML=`<img src="${art.url}" alt="${art.metier}" loading="eager"/>`;
+  carouselEl.appendChild(s);
+  const d=document.createElement('span');
+  if(i===0)d.classList.add('active');
+  dotsEl.appendChild(d);
+});
+tickerEl.innerHTML=[...splashArtisans,...splashArtisans].map(a=>`<span class="ticker-item">${a.metier}</span>`).join('');
+
+let curSlide=0;
+const slides=carouselEl.querySelectorAll('.photo-slide');
+const dots=dotsEl.querySelectorAll('span');
+function nextSlide(){
+  slides[curSlide].classList.remove('active');
+  slides[curSlide].classList.add('exit');
+  dots[curSlide].classList.remove('active');
+  setTimeout(()=>{
+    slides[curSlide].classList.remove('exit');
+    curSlide=(curSlide+1)%slides.length;
+    slides[curSlide].classList.add('active');
+    dots[curSlide].classList.add('active');
+  },700);
+}
+const sInt=setInterval(nextSlide,2200);
+const sTmr=setTimeout(closeSplash,22500);
+function closeSplash(){
+  clearInterval(sInt);clearTimeout(sTmr);
+  document.getElementById('splash').classList.add('hidden');
+  setTimeout(()=>document.getElementById('splash').remove(),900);
+}
+
+/* ===== APP ===== */
+let artisans=JSON.parse(localStorage.getItem('artisans')||'[]');
+let editId=null,photoData=null;
+
+const canvas=document.getElementById('sig-canvas');
+const ctx=canvas.getContext('2d');
+let drawing=false;
+ctx.strokeStyle='#1a3c5e';ctx.lineWidth=2;ctx.lineCap='round';
+function pos(e){
+  const r=canvas.getBoundingClientRect();
+  const sx=canvas.width/r.width,sy=canvas.height/r.height;
+  const src=e.touches?e.touches[0]:e;
+  return{x:(src.clientX-r.left)*sx,y:(src.clientY-r.top)*sy};
+}
+canvas.addEventListener('mousedown',e=>{drawing=true;ctx.beginPath();const p=pos(e);ctx.moveTo(p.x,p.y);});
+canvas.addEventListener('mousemove',e=>{if(!drawing)return;const p=pos(e);ctx.lineTo(p.x,p.y);ctx.stroke();});
+canvas.addEventListener('mouseup',()=>drawing=false);
+canvas.addEventListener('touchstart',e=>{e.preventDefault();drawing=true;ctx.beginPath();const p=pos(e);ctx.moveTo(p.x,p.y);},{passive:false});
+canvas.addEventListener('touchmove',e=>{e.preventDefault();if(!drawing)return;const p=pos(e);ctx.lineTo(p.x,p.y);ctx.stroke();},{passive:false});
+canvas.addEventListener('touchend',()=>drawing=false);
+function clearSig(){ctx.clearRect(0,0,canvas.width,canvas.height);}
+function getSig(){const d=ctx.getImageData(0,0,canvas.width,canvas.height).data;return d.some(v=>v!==0)?canvas.toDataURL():'';}
+
+function previewPhoto(e){
+  const f=e.target.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=ev=>{photoData=ev.target.result;document.getElementById('photo-preview').innerHTML=`<img src="${photoData}" style="max-width:100%;max-height:120px;border-radius:8px"/>`;};
+  r.readAsDataURL(f);
+}
+
+function openModal(id=null){
+  editId=id;photoData=null;
+  document.getElementById('modal-title').textContent=id?'✏️ Modifier l\'artisan':'➕ Ajouter un artisan';
+  clearSig();
+  ['nom','immat','cni','metier','branche','certif','tel','adresse'].forEach(k=>document.getElementById('f-'+k).value='');
+  document.getElementById('f-sexe').value='';
+  document.getElementById('f-statut').value='Actif';
+  document.getElementById('f-apprentis').value='';
+  document.getElementById('f-date').value=new Date().toISOString().slice(0,10);
+  document.getElementById('photo-preview').innerHTML='📷 Appuyer pour choisir une photo';
+  document.getElementById('photo-input').value='';
+  if(id!==null){
+    const a=artisans.find(x=>x.id===id);
+    if(a){
+      document.getElementById('f-nom').value=a.nom||'';
+      document.getElementById('f-immat').value=a.immat||'';
+      document.getElementById('f-cni').value=a.cni||'';
+      document.getElementById('f-metier').value=a.metier||'';
+      document.getElementById('f-branche').value=a.branche||'';
+      document.getElementById('f-certif').value=a.certif||'';
+      document.getElementById('f-apprentis').value=a.apprentis||'';
+      document.getElementById('f-sexe').value=a.sexe||'';
+      document.getElementById('f-tel').value=a.tel||'';
+      document.getElementById('f-adresse').value=a.adresse||'';
+      document.getElementById('f-date').value=a.date||'';
+      document.getElementById('f-statut').value=a.statut||'Actif';
+      if(a.photo){photoData=a.photo;document.getElementById('photo-preview').innerHTML=`<img src="${a.photo}" style="max-width:100%;max-height:120px;border-radius:8px"/>`;}
+      if(a.sig){const img=new Image();img.onload=()=>ctx.drawImage(img,0,0);img.src=a.sig;}
+    }
+  }
+  document.getElementById('modal-bg').classList.add('open');
+}
+function closeModal(){document.getElementById('modal-bg').classList.remove('open');}
+
+function saveArtisan(){
+  const nom=document.getElementById('f-nom').value.trim();
+  const tel=document.getElementById('f-tel').value.trim();
+  if(!nom){alert('Le nom est obligatoire.');return;}
+  if(!tel){alert('Le téléphone est obligatoire.');return;}
+  const a={
+    id:editId!==null?editId:Date.now(),
+    nom,immat:document.getElementById('f-immat').value.trim(),
+    cni:document.getElementById('f-cni').value.trim(),
+    metier:document.getElementById('f-metier').value.trim(),
+    branche:document.getElementById('f-branche').value.trim(),
+    certif:document.getElementById('f-certif').value.trim(),
+    apprentis:parseInt(document.getElementById('f-apprentis').value)||0,
+    sexe:document.getElementById('f-sexe').value,
+    tel,adresse:document.getElementById('f-adresse').value.trim(),
+    date:document.getElementById('f-date').value,
+    statut:document.getElementById('f-statut').value,
+    photo:photoData||'',sig:getSig()
+  };
+  if(editId!==null){const i=artisans.findIndex(x=>x.id===editId);if(i>-1)artisans[i]=a;}
+  else artisans.push(a);
+  localStorage.setItem('artisans',JSON.stringify(artisans));
+  closeModal();renderTable();
+}
+
+function deleteArtisan(id){
+  if(!confirm('Supprimer cet artisan ?'))return;
+  artisans=artisans.filter(x=>x.id!==id);
+  localStorage.setItem('artisans',JSON.stringify(artisans));
+  renderTable();
+}
+
+/* ===== CARTE ===== */
+let currentCardId=null;
+
+function openCard(id){
+  const a=artisans.find(x=>x.id===id);
+  if(!a)return;
+  currentCardId=id;
+
+  // Photo
+  const outer=document.getElementById('card-photo-outer');
+  const photoHTML=a.photo
+    ?`<img src="${a.photo}" style="width:92px;height:92px;border-radius:50%;object-fit:cover;border:4px solid #fff;box-shadow:0 6px 24px rgba(0,0,0,.2);" alt="${a.nom}"/>`
+    :`<div class="card-photo-ph">👤</div>`;
+  outer.innerHTML=photoHTML+`<div class="card-status-dot ${a.statut==='Actif'?'dot-actif':'dot-inactif'}" id="card-dot"></div>`;
+
+  // Textes
+  document.getElementById('card-name').textContent=a.nom||'—';
+  document.getElementById('card-metier').textContent=a.metier?'🔨 '+a.metier:'—';
+  document.getElementById('card-immat').textContent=a.immat?'# '+a.immat:'Non immatriculé';
+  document.getElementById('card-cni').textContent=a.cni||'—';
+  document.getElementById('card-branche').textContent=a.branche||'—';
+  document.getElementById('card-certif').textContent=a.certif||'—';
+  document.getElementById('card-apprentis').textContent=(a.apprentis||0)+' apprenti(s)';
+  document.getElementById('card-sexe').textContent=a.sexe||'—';
+  document.getElementById('card-date').textContent=a.date||'—';
+  document.getElementById('card-adresse').textContent=a.adresse||'—';
+
+  // Signature
+  document.getElementById('card-sig-content').innerHTML=a.sig
+    ?`<img src="${a.sig}" style="height:50px;border-radius:6px;" alt="Signature"/>`
+    :`<span style="font-size:.8rem;color:#cbd5e1;font-style:italic">Aucune signature</span>`;
+
+  // Boutons
+  const telClean=(a.tel||'').replace(/\s/g,'');
+  document.getElementById('card-btn-call').href=telClean?'tel:'+telClean:'#';
+  // WhatsApp : préfixe 225 pour CI si commence par 0
+  const waNum=telClean.startsWith('0')?'225'+telClean.slice(1):telClean;
+  document.getElementById('card-btn-wa').href=telClean
+    ?`https://wa.me/${waNum}?text=${encodeURIComponent('Bonjour '+a.nom+', je vous contacte via l\'annuaire de la Chambre de Métiers de Dabou.')}`
+    :'https://wa.me/';
+
+  document.getElementById('card-bg').classList.add('open');
+}
+
+function closeCard(){
+  document.getElementById('card-bg').classList.remove('open');
+  currentCardId=null;
+}
+function handleCardBgClick(e){if(e.target===document.getElementById('card-bg'))closeCard();}
+
+function printCard(){
+  const a=artisans.find(x=>x.id===currentCardId);
+  if(!a)return;
+  const row=(l,v)=>`<tr><td style="padding:5px 0;color:#64748b;width:40%">${l}</td><td style="padding:5px 0;font-weight:600">${v||'—'}</td></tr>`;
+  document.getElementById('print-zone').innerHTML=`
+    <div style="text-align:center;margin-bottom:16px">
+      <div style="font-size:1.5rem">⚒️</div>
+      <strong style="font-size:1.1rem;color:#1a3c5e">Chambre de Métiers de Dabou</strong><br/>
+      <span style="font-size:.75rem;color:#64748b">Carte Officielle d'Artisan · République de Côte d'Ivoire</span>
+    </div>
+    ${a.photo?`<div style="text-align:center;margin-bottom:12px"><img src="${a.photo}" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid #1a3c5e;"/></div>`:''}
+    <div style="text-align:center;margin-bottom:14px">
+      <strong style="font-size:1.2rem">${a.nom}</strong><br/>
+      <span style="color:#2563eb;font-weight:600">${a.metier||''}</span><br/>
+      <span style="font-size:.75rem;background:#f1f5f9;padding:2px 8px;border-radius:10px">${a.immat||'Non immatriculé'}</span>
+    </div>
+    <table style="width:100%;border-collapse:collapse;font-size:.82rem">
+      ${row('🪪 CNI',a.cni)}
+      ${row('🏭 Branche',a.branche)}
+      ${row('🎓 Certification',a.certif)}
+      ${row('👥 Apprentis',(a.apprentis||0)+' apprenti(s)')}
+      ${row('⚧ Sexe',a.sexe)}
+      ${row('📞 Téléphone',a.tel)}
+      ${row('📍 Adresse',a.adresse)}
+      ${row('🗓️ Inscription',a.date)}
+      ${row('● Statut',a.statut)}
+    </table>
+    ${a.sig?`<div style="margin-top:12px"><strong style="font-size:.75rem;color:#64748b">✍️ SIGNATURE</strong><br/><img src="${a.sig}" style="height:50px;margin-top:4px;"/></div>`:''}
+    <div style="margin-top:16px;text-align:center;font-size:.7rem;color:#94a3b8">Chambre de Métiers de Dabou · Côte d'Ivoire · ${new Date().toLocaleDateString('fr-FR')}</div>
+  `;
+  window.print();
+}
+
+function shareCard(){
+  const a=artisans.find(x=>x.id===currentCardId);
+  if(!a)return;
+  const text=`⚒️ *ARTISAN CERTIFIÉ — Chambre de Métiers de Dabou*\n\n👤 *${a.nom}*\n🔨 Métier : ${a.metier||'—'}\n🪪 Immat. : ${a.immat||'—'}\n📞 Tél. : ${a.tel||'—'}\n📍 ${a.adresse||'—'}\n🎓 ${a.certif||'—'}\n● Statut : ${a.statut||'—'}\n\n🇨🇮 Annuaire Officiel · Région des Grands Ponts`;
+  if(navigator.share){
+    navigator.share({title:'Artisan — '+a.nom,text}).catch(()=>{});
+  } else {
+    navigator.clipboard.writeText(text).then(()=>{
+      alert('✅ Informations copiées dans le presse-papiers !');
+    }).catch(()=>{prompt('Copier ce texte :',text);});
+  }
+}
+
+/* ===== TABLEAU ===== */
+function renderTable(){
+  const q=document.getElementById('search').value.toLowerCase();
+  const fm=document.getElementById('filter-metier').value;
+  const fs=document.getElementById('filter-statut').value;
+  const filtered=artisans.filter(a=>{
+    const mQ=!q||[a.nom,a.metier,a.immat,a.cni,a.tel,a.adresse,a.certif].some(v=>(v||'').toLowerCase().includes(q));
+    const mM=!fm||a.metier===fm;
+    const mS=!fs||a.statut===fs;
+    return mQ&&mM&&mS;
+  });
+  const tbody=document.getElementById('tbody');
+  if(!filtered.length){
+    tbody.innerHTML='<tr class="empty-row"><td colspan="16">Aucun artisan trouvé</td></tr>';
+  } else {
+    tbody.innerHTML=filtered.map((a,i)=>`
+      <tr>
+        <td>${i+1}</td>
+        <td>${a.photo?`<img class="avatar" src="${a.photo}"/>`:'<div class="avatar-placeholder">👤</div>'}</td>
+        <td><strong>${a.nom}</strong></td>
+        <td><code>${a.immat||'—'}</code></td>
+        <td><code>${a.cni||'—'}</code></td>
+        <td>${a.metier||'—'}</td>
+        <td>${a.branche||'—'}</td>
+        <td>${a.certif||'—'}</td>
+        <td>${a.apprentis||0}</td>
+        <td>${a.sexe||'—'}</td>
+        <td>${a.tel?`<a href="tel:${a.tel}">📞 Appeler</a>`:'—'}</td>
+        <td>${a.adresse||'—'}</td>
+        <td>${a.date||'—'}</td>
+        <td><span class="badge ${a.statut==='Actif'?'badge-actif':'badge-inactif'}">${a.statut||'—'}</span></td>
+        <td>${a.sig?`<img src="${a.sig}" style="height:40px;border-radius:4px"/>`:'—'}</td>
+        <td>
+          <div class="action-btns">
+            <button class="btn btn-view" title="Voir la carte" onclick="openCard(${a.id})">👁️</button>
+            <button class="btn btn-edit" title="Modifier" onclick="openModal(${a.id})">✏️</button>
+            <button class="btn btn-danger" title="Supprimer" onclick="deleteArtisan(${a.id})">🗑️</button>
+          </div>
+        </td>
+      </tr>`).join('');
+  }
+  document.getElementById('s-total').textContent=artisans.length;
+  const metiers=[...new Set(artisans.map(a=>a.metier).filter(Boolean))];
+  document.getElementById('s-metiers').textContent=metiers.length;
+  document.getElementById('s-apprentis').textContent=artisans.reduce((s,a)=>s+(a.apprentis||0),0);
+  document.getElementById('s-actifs').textContent=artisans.filter(a=>a.statut==='Actif').length;
+  const sel=document.getElementById('filter-metier');
+  const cur=sel.value;
+  sel.innerHTML='<option value="">🔨 Tous les métiers</option>'+metiers.map(m=>`<option${cur===m?' selected':''}>${m}</option>`).join('');
+}
+
+function exportCSV(){
+  const headers=['N°','Nom','Immatriculation','CNI','Métier','Branche','Certification','Apprentis','Sexe','Téléphone','Adresse','Date inscription','Statut'];
+  const rows=artisans.map((a,i)=>[i+1,a.nom,a.immat,a.cni,a.metier,a.branche,a.certif,a.apprentis,a.sexe,a.tel,a.adresse,a.date,a.statut]);
+  const csv=[headers,...rows].map(r=>r.map(v=>'"'+(v||'')+'"').join(',')).join('\n');
+  const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const link=document.createElement('a');
+  link.href=url;link.download='artisans_dabou.csv';link.click();
+  URL.revokeObjectURL(url);
+}
+
+renderTable();
+</script>
+</body>
+</html>
