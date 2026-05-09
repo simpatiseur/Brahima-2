@@ -291,7 +291,7 @@ canvas{border:1.5px solid #fcd9a0;border-radius:8px;width:100%;cursor:crosshair;
       <button class="btn btn-ve" onclick="openPostModal()">✏️ Publier</button>
     </div>
     <div class="posts-grid" id="posts-grid">
-      <div class="no-posts"><span class="ni">🛍️</span>Aucune publication pour l'instant</div>
+      <div class="no-posts"><span class="ni">🛍️</span>Aucune publication pour l&apos;instant</div>
     </div>
   </div>
 
@@ -732,7 +732,7 @@ function renderPosts(){
   const grid=document.getElementById('posts-grid');
   const filtered=posts.filter(p=>!q||[p.titre,p.desc,p.prix].some(v=>(v||'').toLowerCase().includes(q)));
   if(!filtered.length){
-    grid.innerHTML='<div class="no-posts"><span class="ni">🛍️</span>Aucune publication pour l'instant</div>';
+    grid.innerHTML='<div class="no-posts"><span class="ni">🛍️</span>Aucune publication pour l&apos;instant</div>';
     return;
   }
   grid.innerHTML=filtered.map(post=>{
@@ -884,4 +884,4 @@ function exportCSV(){
 renderTable();renderPosts();
 </script>
 </body>
-          </html>
+        </html>
