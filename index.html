@@ -7,8 +7,8 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --or:#F77F00;--ve:#009A44;--bl:#fff;
-  --or2:#e06a00;--ve2:#007a35;
+  --or:#FF8000;--ve:#009A44;--bl:#fff;
+  --or2:#e07000;--ve2:#007a35;
   --bg:#FFF8F0;--txt:#3d1f00;--gris:#888;
 }
 body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--txt);}
@@ -569,7 +569,7 @@ function savePosts(){localStorage.setItem('posts',JSON.stringify(posts));}
 const sigC=document.getElementById('sig');
 const sCtx=sigC.getContext('2d');
 let draw=false;
-sCtx.strokeStyle='#F77F00';sCtx.lineWidth=2;sCtx.lineCap='round';
+sCtx.strokeStyle='#FF8000';sCtx.lineWidth=2;sCtx.lineCap='round';
 function sPos(e){
   const r=sigC.getBoundingClientRect();
   const src=e.touches?e.touches[0]:e;
@@ -840,16 +840,16 @@ function printCard(){
   const a=arts.find(x=>x.id===currentCardId);if(!a)return;
   const row=(l,v)=>`<tr><td style="padding:5px 0;color:#999;width:40%">${l}</td><td style="padding:5px 0;font-weight:600;color:#3d1f00">${v||'—'}</td></tr>`;
   document.getElementById('pz').innerHTML=`
-    <div style="height:5px;background:linear-gradient(to right,#F77F00 33%,#fff 33% 66%,#009A44 66%);margin-bottom:14px;border-radius:3px"></div>
+    <div style="height:5px;background:linear-gradient(to right,#FF8000 33%,#fff 33% 66%,#009A44 66%);margin-bottom:14px;border-radius:3px"></div>
     <div style="text-align:center;margin-bottom:14px">
       <div style="font-size:1.5rem">⚒️</div>
-      <strong style="font-size:1.1rem;color:#F77F00">Chambre de Métiers de Dabou</strong><br/>
+      <strong style="font-size:1.1rem;color:#FF8000">Chambre de Métiers de Dabou</strong><br/>
       <span style="font-size:.75rem;color:#999">Carte Officielle · Côte d'Ivoire 🇨🇮</span>
     </div>
-    ${a.ph?`<div style="text-align:center;margin-bottom:12px"><img src="${a.ph}" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid #F77F00;"/></div>`:''}
+    ${a.ph?`<div style="text-align:center;margin-bottom:12px"><img src="${a.ph}" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid #FF8000;"/></div>`:''}
     <div style="text-align:center;margin-bottom:14px">
       <strong style="font-size:1.2rem;color:#3d1f00">${a.nom}</strong><br/>
-      <span style="color:#F77F00;font-weight:700">${a.met||''}</span><br/>
+      <span style="color:#FF8000;font-weight:700">${a.met||''}</span><br/>
       <span style="font-size:.75rem;background:#fff3e0;padding:2px 8px;border-radius:10px">${a.imm||'Non immatriculé'}</span>
     </div>
     <table style="width:100%;border-collapse:collapse;font-size:.82rem">
