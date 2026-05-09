@@ -870,35 +870,49 @@ function shareCard(){
 }
 
 /* ======= EXPORT CSV ======= */
+/* ======= EXPORT CSV — VERSION CORRIGÉE ======= */
 function exportCSV(){
-  if(!artisans.length){showToast('⚠️ Aucun artisan à exporter.');return;}
+  if(!arts.length){alert('⚠️ Aucun artisan à exporter.');return;}
   const h=['N°','Nom','Immatriculation','CNI','Métier','Branche','Certification','Apprentis','Sexe','Téléphone','Adresse','Date inscription','Statut'];
-  const rows=artisans.map((a,i)=>[i+1,a.nom,a.immat,a.cni,a.metier,a.branche,a.certif,a.apprentis,a.sexe,a.tel,a.adresse,a.date,a.statut]);
+  const rows=arts.map((a,i)=>[i+1,a.nom,a.imm,a.cni,a.met,a.bra,a.cer,a.app,a.sex,a.tel,a.adr,a.dat,a.sta]);
   const csv='\uFEFF'+[h,...rows].map(r=>r.map(v=>'"'+(v||'')+'"').join(',')).join('\n');
+
+  // Méthode 1 : data URI
   try{
     const uri='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
-    const a=document.createElement('a');
-    a.href=uri;a.download='artisans_dabou.csv';
-    document.body.appendChild(a);a.click();document.body.removeChild(a);
-    showToast('✅ Export téléchargé !');
-  } catch(e){
-    afficherCSVPopup(csv);
-  }
+    const lnk=document.createElement('a');
+    lnk.href=uri;lnk.download='artisans_dabou.csv';
+    document.body.appendChild(lnk);lnk.click();document.body.removeChild(lnk);
+  } catch(e){}
+
+  // Méthode 2 : popup avec copier (fonctionne dans APK WebView)
+  afficherCSVPopup(csv);
 }
 
 function afficherCSVPopup(csv){
   const old=document.getElementById('csv-popup');if(old)old.remove();
   const div=document.createElement('div');
   div.id='csv-popup';
-  div.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:5000;display:flex;align-items:center;justify-content:center;padding:16px';
-  div.innerHTML=`<div style="background:#fff;border-radius:14px;padding:20px;width:100%;max-width:500px;max-height:80vh;overflow-y:auto">
-    <h3 style="color:#F77F00;margin-bottom:12px">📋 Données exportées</h3>
-    <textarea readonly style="width:100%;height:200px;font-size:.72rem;font-family:monospace;border:1px solid #ddd;border-radius:8px;padding:8px">${csv}</textarea>
-    <div style="display:flex;gap:8px;margin-top:12px">
-      <button onclick="navigator.clipboard.writeText(document.querySelector('#csv-popup textarea').value).then(()=>showToast('📋 Copié !'))" style="flex:1;padding:10px;background:#009A44;color:#fff;border:none;border-radius:8px;font-weight:700;cursor:pointer">📋 Copier</button>
-      <button onclick="document.getElementById('csv-popup').remove()" style="flex:1;padding:10px;background:#c0392b;color:#fff;border:none;border-radius:8px;font-weight:700;cursor:pointer">✕ Fermer</button>
-    </div>
-  </div>`;
+  div.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:5000;display:flex;align-items:center;justify-content:center;padding:16px';
+  div.innerHTML=`
+    <div style="background:#fff;border-radius:16px;padding:20px;width:100%;max-width:500px;max-height:85vh;overflow-y:auto;box-shadow:0 8px 40px rgba(0,0,0,.3)">
+      <h3 style="color:#FF8000;margin-bottom:6px;font-size:1rem">📋 Export de la liste</h3>
+      <p style="font-size:.75rem;color:#666;margin-bottom:10px">Copiez et collez dans <b>Excel, Google Sheets ou WhatsApp</b></p>
+      <textarea readonly id="csv-text" style="width:100%;height:180px;font-size:.7rem;font-family:monospace;border:1.5px solid #fcd9a0;border-radius:8px;padding:8px;resize:none">${csv}</textarea>
+      <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+        <button onclick="
+          var t=document.getElementById('csv-text');
+          t.select();t.setSelectionRange(0,99999);
+          try{navigator.clipboard.writeText(t.value).then(()=>alert('📋 Données copiées !'));}
+          catch(e){document.execCommand('copy');alert('📋 Données copiées !');}
+        " style="flex:1;min-width:120px;padding:11px;background:#009A44;color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer">📋 Copier tout</button>
+        <button onclick="
+          var t=document.getElementById('csv-text').value;
+          window.open('https://wa.me/?text='+encodeURIComponent(t.substring(0,1000)),'_blank');
+        " style="flex:1;min-width:120px;padding:11px;background:#25D366;color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer">💬 WhatsApp</button>
+        <button onclick="document.getElementById('csv-popup').remove()" style="flex:1;min-width:120px;padding:11px;background:#dc2626;color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer">✕ Fermer</button>
+      </div>
+    </div>`;
   document.body.appendChild(div);
 }
 
