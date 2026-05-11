@@ -8,8 +8,43 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{--or:#FF8000;--ve:#009A44;--or2:#e07000;--ve2:#007a35;--bg:#FFF8F0;--txt:#3d1f00;--gris:#888}
-body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--txt);position:fixed;inset:0;overflow:hidden}
-#app-wrap{position:fixed;inset:0;display:flex;flex-direction:column;overflow:hidden}
+
+/* ===== FIX SCROLL RESTART ===== */
+html{height:100%;overflow:hidden;overscroll-behavior:none}
+body{
+  font-family:system-ui,sans-serif;background:var(--bg);color:var(--txt);
+  position:fixed;inset:0;overflow:hidden;
+  overscroll-behavior:none;
+  /* Bloque le pull-to-refresh natif sur mobile */
+  overscroll-behavior-y:none;
+  touch-action:pan-x pan-y;
+}
+#app-wrap{position:fixed;inset:0;display:flex;flex-direction:column;overflow:hidden;overscroll-behavior:none}
+
+/* ===== SCROLLBAR STYLISÉE ===== */
+.app-content{
+  flex:1;overflow-y:scroll;overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior-y:contain;
+  /* Scrollbar visible et stylisée */
+  scrollbar-width:thin;
+  scrollbar-color:var(--or) #fff3e0;
+}
+.app-content::-webkit-scrollbar{width:6px}
+.app-content::-webkit-scrollbar-track{background:#fff3e0;border-radius:99px}
+.app-content::-webkit-scrollbar-thumb{background:linear-gradient(to bottom,var(--or),var(--ve));border-radius:99px}
+.app-content::-webkit-scrollbar-thumb:hover{background:var(--or2)}
+
+/* Même traitement pour les modals et listes */
+.modal-bg,.modal-body,.msg-messages,.msg-list,.art-location-list,.aide-sec-body{
+  overscroll-behavior:contain;
+  scrollbar-width:thin;
+  scrollbar-color:var(--or) #fff3e0;
+}
+.modal-bg::-webkit-scrollbar,.modal-body::-webkit-scrollbar,.msg-messages::-webkit-scrollbar,
+.msg-list::-webkit-scrollbar,.art-location-list::-webkit-scrollbar{width:4px}
+.modal-bg::-webkit-scrollbar-thumb,.modal-body::-webkit-scrollbar-thumb,.msg-messages::-webkit-scrollbar-thumb,
+.msg-list::-webkit-scrollbar-thumb,.art-location-list::-webkit-scrollbar-thumb{background:var(--or);border-radius:99px}
 
 /* SPLASH */
 #splash{position:fixed;inset:0;z-index:9999;background:#000;overflow:hidden;transition:opacity .8s,visibility .8s}
@@ -34,7 +69,7 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--txt);posi
 #sp-skip{position:absolute;top:16px;right:14px;z-index:3;background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.3);color:rgba(255,255,255,.85);border-radius:20px;padding:5px 13px;font-size:.72rem;cursor:pointer}
 
 /* LOGIN */
-#login-screen{display:none;position:fixed;inset:0;z-index:8000;background:linear-gradient(135deg,var(--or),var(--or2) 45%,var(--ve));align-items:center;justify-content:center;padding:20px;overflow-y:auto}
+#login-screen{display:none;position:fixed;inset:0;z-index:8000;background:linear-gradient(135deg,var(--or),var(--or2) 45%,var(--ve));align-items:center;justify-content:center;padding:20px;overflow-y:auto;overscroll-behavior:contain}
 #login-screen.show{display:flex}
 .login-box{background:#fff;border-radius:20px;padding:28px 22px;width:100%;max-width:380px;box-shadow:0 20px 60px rgba(0,0,0,.3)}
 .login-box::before{content:'';display:block;height:5px;background:linear-gradient(to right,var(--or) 33%,#fff 33% 66%,var(--ve) 66%);margin:-28px -22px 22px;border-radius:20px 20px 0 0}
@@ -56,7 +91,7 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--txt);posi
 .login-err.ok{color:#009A44}
 
 /* APP */
-#app{display:none;flex-direction:column;height:100%}
+#app{display:none;flex-direction:column;height:100%;overflow:hidden}
 #app.visible{display:flex}
 .nav-tabs{display:flex;background:linear-gradient(to right,var(--or),var(--or2) 45%,var(--ve));flex-shrink:0;overflow-x:auto;-webkit-overflow-scrolling:touch;box-shadow:0 2px 10px rgba(0,0,0,.2)}
 .nav-tabs::-webkit-scrollbar{display:none}
@@ -65,7 +100,6 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--txt);posi
 .nav-tab .ti{font-size:1rem;display:block;margin-bottom:2px}
 .notif-dot{position:absolute;top:8px;right:6px;background:#dc2626;color:#fff;border-radius:50%;width:16px;height:16px;font-size:.6rem;font-weight:700;display:none;align-items:center;justify-content:center}
 .notif-dot.show{display:flex}
-.app-content{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior-y:contain}
 .section{display:none;padding-bottom:80px;min-height:100%}
 .section.active{display:block}
 .sec-header{background:linear-gradient(to right,var(--or),var(--or2) 45%,var(--ve));color:#fff;text-align:center;padding:20px 16px}
@@ -92,7 +126,9 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--txt);posi
 .btn-sm{padding:6px 10px;font-size:.76rem}
 
 /* TABLE */
-.table-wrap{overflow-x:auto;padding:0 16px 16px}
+.table-wrap{overflow-x:auto;padding:0 16px 16px;scrollbar-width:thin;scrollbar-color:var(--or) #fff3e0}
+.table-wrap::-webkit-scrollbar{height:5px}
+.table-wrap::-webkit-scrollbar-thumb{background:var(--or);border-radius:99px}
 table{width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(247,127,0,.1);font-size:.82rem}
 th{background:linear-gradient(to right,var(--or),var(--or2));color:#fff;padding:11px 9px;text-align:left;white-space:nowrap}
 td{padding:9px;border-bottom:1px solid #fff3e0;vertical-align:middle}
@@ -140,7 +176,7 @@ tr:hover td{background:#fff8f0}
 .msg-info .mm{font-size:.72rem;color:#999;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:130px}
 .msg-chat{flex:1;display:flex;flex-direction:column;background:#FFF8F0;min-width:0}
 .msg-chat-header{padding:12px 16px;background:linear-gradient(to right,var(--or),var(--ve));color:#fff;font-weight:700;font-size:.88rem;flex-shrink:0}
-.msg-messages{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px}
+.msg-messages{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;overscroll-behavior:contain}
 .msg-bubble{max-width:75%;padding:10px 14px;border-radius:16px;font-size:.85rem;line-height:1.5}
 .msg-bubble.sent{background:var(--or);color:#fff;align-self:flex-end;border-bottom-right-radius:4px}
 .msg-bubble.recv{background:#fff;color:var(--txt);align-self:flex-start;border-bottom-left-radius:4px;box-shadow:0 1px 4px rgba(0,0,0,.1)}
@@ -164,7 +200,7 @@ tr:hover td{background:#fff8f0}
 .conf-art-item .cam{font-size:.67rem;color:var(--or)}
 
 /* MODAL */
-.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:1000;overflow-y:auto;padding:16px}
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:1000;overflow-y:auto;padding:16px;overscroll-behavior:contain}
 .modal-bg.open{display:flex;align-items:flex-start;justify-content:center}
 .modal{background:#fff;border-radius:16px;padding:22px;width:100%;max-width:560px;box-shadow:0 20px 60px rgba(0,0,0,.3)}
 .mhdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
@@ -182,7 +218,7 @@ canvas{border:1.5px solid #fcd9a0;border-radius:8px;width:100%;cursor:crosshair;
 .mftr{display:flex;gap:8px;justify-content:flex-end;margin-top:12px}
 
 /* CARTE ARTISAN */
-#card-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(6px);z-index:3000;align-items:center;justify-content:center;padding:16px;overflow-y:auto}
+#card-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(6px);z-index:3000;align-items:center;justify-content:center;padding:16px;overflow-y:auto;overscroll-behavior:contain}
 #card-bg.open{display:flex}
 .acard{background:#fff;border-radius:22px;width:100%;max-width:400px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.4);animation:cardIn .3s cubic-bezier(.34,1.56,.64,1);margin:auto}
 @keyframes cardIn{from{opacity:0;transform:scale(.85) translateY(30px)}to{opacity:1;transform:scale(1) translateY(0)}}
@@ -240,6 +276,22 @@ canvas{border:1.5px solid #fcd9a0;border-radius:8px;width:100%;cursor:crosshair;
 .art-loc-item{display:flex;align-items:center;gap:10px;padding:10px;border-radius:10px;border:1px solid #fcd9a0;margin-bottom:8px;cursor:pointer}
 .art-loc-item:hover{background:#fff8f0}
 
+/* ===== NOTIFICATION BANNER ===== */
+#notif-banner{
+  display:none;position:fixed;top:0;left:0;right:0;z-index:9500;
+  background:linear-gradient(to right,#dc2626,#b91c1c);
+  color:#fff;padding:12px 16px;
+  box-shadow:0 4px 20px rgba(220,38,38,.5);
+  animation:slideDown .4s cubic-bezier(.34,1.56,.64,1);
+  cursor:pointer;
+}
+#notif-banner.show{display:flex;align-items:center;gap:10px}
+@keyframes slideDown{from{transform:translateY(-100%)}to{transform:translateY(0)}}
+#notif-banner .nb-icon{font-size:1.4rem;flex-shrink:0;animation:bell .5s ease infinite alternate}
+@keyframes bell{from{transform:rotate(-15deg)}to{transform:rotate(15deg)}}
+#notif-banner .nb-text{flex:1;font-size:.84rem;font-weight:700}
+#notif-banner .nb-close{background:rgba(255,255,255,.2);border:none;color:#fff;padding:4px 10px;border-radius:20px;cursor:pointer;font-size:.76rem;font-weight:700}
+
 /* AIDE */
 .aide-search{width:100%;padding:10px 16px;border:1.5px solid var(--or);border-radius:25px;font-size:.88rem;outline:none;margin-bottom:14px}
 .aide-toc{background:#fff;border-radius:14px;padding:14px;box-shadow:0 2px 8px rgba(247,127,0,.1);margin-bottom:14px}
@@ -257,7 +309,6 @@ canvas{border:1.5px solid #fcd9a0;border-radius:8px;width:100%;cursor:crosshair;
 .aide-step{display:flex;gap:12px;align-items:flex-start;margin-bottom:14px}
 .aide-step-num{min-width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.76rem;font-weight:700;color:#fff;flex-shrink:0}
 .aide-step-text{font-size:.84rem;color:#444;line-height:1.6}
-.aide-illustration{width:100%;height:52px;border-radius:8px;margin-bottom:6px;overflow:hidden}
 
 /* SETTINGS */
 .settings-card{background:#fff;border-radius:14px;padding:18px;margin-bottom:12px;box-shadow:0 2px 8px rgba(247,127,0,.08)}
@@ -275,15 +326,18 @@ canvas{border:1.5px solid #fcd9a0;border-radius:8px;width:100%;cursor:crosshair;
 #sync-dot.syncing{background:var(--or);animation:pulse 1s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 
-/* PENDING BADGE */
-#pending-badge{background:#dc2626;color:#fff;border-radius:50%;width:16px;height:16px;font-size:.6rem;font-weight:700;display:none;align-items:center;justify-content:center;position:absolute;top:8px;right:4px}
-#pending-badge.show{display:flex}
-
 @media print{body>*:not(#pz){display:none!important}#pz{display:block!important;padding:20px;max-width:400px;margin:auto;border:2px solid var(--or);border-radius:12px}}
 </style>
 </head>
 <body>
 <div id="sync-dot"></div>
+
+<!-- NOTIFICATION BANNER -->
+<div id="notif-banner" onclick="goToAnnuaire()">
+  <div class="nb-icon">🔔</div>
+  <div class="nb-text" id="notif-banner-text">Nouvelle demande d'inscription !</div>
+  <button class="nb-close" onclick="event.stopPropagation();dismissBanner()">✕</button>
+</div>
 
 <!-- SPLASH -->
 <div id="splash">
@@ -314,21 +368,18 @@ canvas{border:1.5px solid #fcd9a0;border-radius:8px;width:100%;cursor:crosshair;
       <button class="login-tab" onclick="switchTab('artisan',this)">🔨 Artisan</button>
       <button class="login-tab" onclick="switchTab('register',this)">📝 S'inscrire</button>
     </div>
-    <!-- Admin -->
     <div id="tab-admin-form">
       <div class="lf"><label>Email</label><input type="email" id="adm-email" placeholder="admin@dabou.ci"/></div>
       <div class="lf"><label>Mot de passe</label><input type="password" id="adm-pass" placeholder="••••••••"/></div>
       <label class="remember-row"><input type="checkbox" id="adm-remember"/> Se souvenir de moi</label>
       <button class="btn-login" onclick="loginAdmin()">🔐 Connexion Admin</button>
     </div>
-    <!-- Artisan -->
     <div id="tab-artisan-form" style="display:none">
       <div class="lf"><label>Téléphone</label><input type="tel" id="art-tel" placeholder="07 XX XX XX XX"/></div>
       <div class="lf"><label>Code (4 chiffres)</label><input type="password" id="art-code" placeholder="••••" maxlength="4"/></div>
       <label class="remember-row"><input type="checkbox" id="art-remember"/> Se souvenir de moi</label>
       <button class="btn-login" onclick="loginArtisan()">🔨 Connexion Artisan</button>
     </div>
-    <!-- Inscription -->
     <div id="tab-register-form" style="display:none">
       <div class="lf"><label>Nom et Prénom *</label><input type="text" id="reg-nom" placeholder="Ex: Kouassi Jean"/></div>
       <div class="lf"><label>Téléphone *</label><input type="tel" id="reg-tel" placeholder="07 XX XX XX XX"/></div>
@@ -356,7 +407,6 @@ canvas{border:1.5px solid #fcd9a0;border-radius:8px;width:100%;cursor:crosshair;
   </nav>
 
   <div class="app-content" id="app-content">
-
     <!-- ANNUAIRE -->
     <div class="section active" id="tab-annuaire">
       <div class="sec-header"><div style="font-size:2rem">⚒️</div><h1>Chambre de Métiers de Dabou</h1><p>Annuaire Officiel · République de Côte d'Ivoire</p></div>
@@ -366,7 +416,6 @@ canvas{border:1.5px solid #fcd9a0;border-radius:8px;width:100%;cursor:crosshair;
         <div class="stat-card"><div class="val" id="s-app">0</div><div class="lbl">Apprentis</div></div>
         <div class="stat-card"><div class="val" id="s-act">0</div><div class="lbl">Actifs</div></div>
       </div>
-      <!-- Demandes en attente -->
       <div id="pending-section" style="display:none;padding:0 16px 12px">
         <div style="background:#fff;border-radius:12px;padding:14px;border-left:4px solid #dc2626;box-shadow:0 2px 8px rgba(220,38,38,.15)">
           <div style="font-size:.88rem;font-weight:700;color:#dc2626;margin-bottom:10px">🔔 Demandes d'inscription en attente</div>
@@ -412,7 +461,7 @@ canvas{border:1.5px solid #fcd9a0;border-radius:8px;width:100%;cursor:crosshair;
     <div class="section" id="tab-msg">
       <div class="sec-header"><div style="font-size:2rem">💬</div><h1>Messagerie</h1><p>Échanges en temps réel</p></div>
       <div class="msg-layout">
-        <div class="msg-list" id="msg-list"><div style="padding:20px;text-align:center;color:#ccc;font-size:.82rem">Chargement...</div></div>
+        <div class="msg-list" id="msg-list"></div>
         <div class="msg-chat" id="msg-chat"><div class="msg-empty">👈 Sélectionnez un artisan</div></div>
       </div>
     </div>
@@ -466,7 +515,6 @@ canvas{border:1.5px solid #fcd9a0;border-radius:8px;width:100%;cursor:crosshair;
       <div class="sec-header"><div style="font-size:2rem">❓</div><h1>Guide d'utilisation</h1><p>Comment utiliser l'app de A à Z</p></div>
       <div style="padding:16px" id="aide-root"></div>
     </div>
-
   </div>
 </div>
 </div>
@@ -599,6 +647,22 @@ canvas{border:1.5px solid #fcd9a0;border-radius:8px;width:100%;cursor:crosshair;
 <div id="pz"></div>
 
 <script>
+// ===== FIX PULL-TO-REFRESH =====
+// Bloque le geste de "tirer vers le bas pour recharger" sur Chrome Android
+document.addEventListener('touchstart', function(e){
+  if(e.touches.length === 1) window._touchStartY = e.touches[0].clientY;
+}, {passive: true});
+
+document.addEventListener('touchmove', function(e){
+  var content = document.getElementById('app-content');
+  if(!content) return;
+  var dy = e.touches[0].clientY - (window._touchStartY || 0);
+  // Si on tire vers le bas ET qu'on est en haut du scroll → bloquer
+  if(dy > 0 && content.scrollTop <= 0){
+    e.preventDefault();
+  }
+}, {passive: false});
+
 // ===== CONFIG =====
 var SB_URL = 'https://narfbjdmbvlpxdbzwwkb.supabase.co';
 var SB_KEY = 'sb_publishable_3ZPgNLcgXVqKun7DPetHew_zZs2iM3m';
@@ -610,7 +674,8 @@ var messages = JSON.parse(localStorage.getItem('messages') || '[]');
 var pending = JSON.parse(localStorage.getItem('pending') || '[]');
 var adminPass = localStorage.getItem('adminPass') || 'admin123';
 var currentUser = null, eid = null, phData = null, postPhData = null;
-var currentCardId = null, activeConvId = null, myCharts = {}, msgInterval = null;
+var currentCardId = null, activeConvId = null, myCharts = {}, syncInterval = null;
+var lastPendingCount = 0; // Pour détecter les nouvelles demandes
 
 function saveLocal(){ localStorage.setItem('arts', JSON.stringify(arts)); }
 function savePosts(){ localStorage.setItem('posts', JSON.stringify(posts)); }
@@ -623,31 +688,66 @@ function showToast(msg, color){
   t.classList.add('show');
   setTimeout(function(){ t.classList.remove('show'); }, 3000);
 }
-function showSync(on){ var d = document.getElementById('sync-dot'); d.style.display = on ? 'block' : 'none'; if(on) d.classList.add('syncing'); else d.classList.remove('syncing'); }
+function showSync(on){ var d = document.getElementById('sync-dot'); d.style.display = on?'block':'none'; if(on) d.classList.add('syncing'); else d.classList.remove('syncing'); }
+
+// ===== NOTIFICATION BANNER =====
+var bannerTimeout = null;
+function showNotifBanner(msg){
+  var b = document.getElementById('notif-banner');
+  document.getElementById('notif-banner-text').textContent = msg;
+  b.classList.add('show');
+  // Son de notification (bip simple)
+  try {
+    var ctx = new (window.AudioContext || window.webkitAudioContext)();
+    var o = ctx.createOscillator();
+    var g = ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    o.frequency.setValueAtTime(880, ctx.currentTime);
+    o.frequency.setValueAtTime(660, ctx.currentTime + 0.1);
+    g.gain.setValueAtTime(0.3, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
+    o.start(ctx.currentTime); o.stop(ctx.currentTime + 0.4);
+  } catch(e){}
+  // Vibration si disponible
+  if(navigator.vibrate) navigator.vibrate([200, 100, 200]);
+  // Auto-dismiss après 8 secondes
+  if(bannerTimeout) clearTimeout(bannerTimeout);
+  bannerTimeout = setTimeout(dismissBanner, 8000);
+}
+function dismissBanner(){
+  document.getElementById('notif-banner').classList.remove('show');
+  if(bannerTimeout) clearTimeout(bannerTimeout);
+}
+function goToAnnuaire(){
+  dismissBanner();
+  goTab('annuaire', document.querySelector('.nav-tab'));
+  setTimeout(function(){ document.getElementById('pending-section').scrollIntoView({behavior:'smooth'}); }, 300);
+}
 
 // ===== SUPABASE =====
 function sbReq(path, method, body, extra){
   var h = {'Content-Type':'application/json','apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY};
   if(extra) Object.keys(extra).forEach(function(k){ h[k] = extra[k]; });
-  var opts = {method: method || 'GET', headers: h};
+  var opts = {method: method||'GET', headers: h};
   if(body) opts.body = JSON.stringify(body);
   return fetch(SB_URL + path, opts).then(function(r){ return r.status===204?null:r.json(); }).catch(function(){ return null; });
 }
 
 function syncArtsToSupabase(a){
   var d = {id:String(a.id),nom:a.nom,imm:a.imm||'',cni:a.cni||'',met:a.met||'',bra:a.bra||'',cer:a.cer||'',app:a.app||0,sex:a.sex||'',tel:a.tel||'',adr:a.adr||'',dat:a.dat||'',sta:a.sta||'Actif',code:a.code||'',apprentis_noms:JSON.stringify(a.apprentisNoms||[])};
-  sbReq('/rest/v1/artisans', 'POST', d, {'Prefer':'resolution=merge-duplicates'});
+  sbReq('/rest/v1/artisans','POST',d,{'Prefer':'resolution=merge-duplicates'});
 }
-function deleteArtFromSB(id){ sbReq('/rest/v1/artisans?id=eq.'+String(id), 'DELETE'); }
+function deleteArtFromSB(id){ sbReq('/rest/v1/artisans?id=eq.'+String(id),'DELETE'); }
 
 function syncPendingToSB(p){
   var d = {id:String(p.id),nom:p.nom,tel:p.tel,met:p.met,adr:p.adr||'',code:p.code};
-  sbReq('/rest/v1/pending_artisans', 'POST', d, {'Prefer':'resolution=merge-duplicates'});
+  return sbReq('/rest/v1/pending_artisans','POST',d,{'Prefer':'resolution=merge-duplicates'});
 }
-function deletePendingFromSB(id){ sbReq('/rest/v1/pending_artisans?id=eq.'+String(id), 'DELETE'); }
+function deletePendingFromSB(id){ sbReq('/rest/v1/pending_artisans?id=eq.'+String(id),'DELETE'); }
 
 function loadFromSupabase(){
   showSync(true);
+  lastPendingCount = pending.length;
   // Charger artisans
   sbReq('/rest/v1/artisans?order=nom.asc').then(function(data){
     if(data && Array.isArray(data) && data.length > 0){
@@ -659,21 +759,10 @@ function loadFromSupabase(){
       });
       saveLocal(); renderTable(); showToast('☁️ Données synchronisées !');
     }
-  });
-  // Charger demandes en attente (pour admin)
-  sbReq('/rest/v1/pending_artisans').then(function(data){
-    if(data && Array.isArray(data) && data.length > 0){
-      data.forEach(function(p){
-        var exists = false; for(var i=0;i<pending.length;i++){if(String(pending[i].id)===String(p.id)){exists=true;break;}}
-        if(!exists) pending.push({id:parseInt(p.id)||p.id,nom:p.nom,tel:p.tel,met:p.met,adr:p.adr||'',code:p.code,date:p.created_at||new Date().toLocaleDateString('fr-FR')});
-      });
-      savePending();
-      if(currentUser && currentUser.type === 'admin'){
-        renderPendingList(); updatePendingNotif();
-      }
-    }
     showSync(false);
   });
+  // Charger demandes en attente
+  checkPendingFromSB();
   // Charger messages
   sbReq('/rest/v1/messages?order=id.asc').then(function(data){
     if(data && Array.isArray(data) && data.length > 0){
@@ -684,29 +773,48 @@ function loadFromSupabase(){
   });
 }
 
-function startMsgSync(){
-  if(msgInterval) clearInterval(msgInterval);
-  msgInterval = setInterval(function(){
-    sbReq('/rest/v1/messages?order=id.asc').then(function(data){
-      if(data && Array.isArray(data) && data.length > messages.length){
-        messages = data; saveMsgs(); renderMsgList();
-        if(activeConvId) openConv(activeConvId);
+// ===== VÉRIFICATION DEMANDES EN ATTENTE (pour admin) =====
+function checkPendingFromSB(){
+  if(!currentUser || currentUser.type !== 'admin') return;
+  sbReq('/rest/v1/pending_artisans').then(function(data){
+    if(!data || !Array.isArray(data)) return;
+    var newOnes = false;
+    data.forEach(function(p){
+      var exists = false;
+      for(var i=0;i<pending.length;i++){if(String(pending[i].id)===String(p.id)){exists=true;break;}}
+      if(!exists){
+        pending.push({id:parseInt(p.id)||p.id,nom:p.nom,tel:p.tel,met:p.met,adr:p.adr||'',code:p.code,date:p.created_at||new Date().toLocaleDateString('fr-FR')});
+        newOnes = true;
       }
     });
-    // Vérifier nouvelles demandes pour admin
-    if(currentUser && currentUser.type === 'admin'){
-      sbReq('/rest/v1/pending_artisans').then(function(data){
-        if(data && Array.isArray(data)){
-          var newOnes = false;
-          data.forEach(function(p){
-            var exists = false; for(var i=0;i<pending.length;i++){if(String(pending[i].id)===String(p.id)){exists=true;break;}}
-            if(!exists){ pending.push({id:parseInt(p.id)||p.id,nom:p.nom,tel:p.tel,met:p.met,adr:p.adr||'',code:p.code}); newOnes=true; }
-          });
-          if(newOnes){ savePending(); renderPendingList(); updatePendingNotif(); showToast('🔔 Nouvelle demande d\'inscription !','#dc2626'); }
+    if(newOnes){
+      savePending();
+      renderPendingList();
+      updatePendingNotif();
+      // Notification bien visible pour l'admin
+      showNotifBanner('🔔 Nouvelle demande d\'inscription ! Appuyez pour voir.');
+    }
+  });
+}
+
+function startSyncInterval(){
+  if(syncInterval) clearInterval(syncInterval);
+  // Polling toutes les 3 secondes pour les demandes, 8s pour les messages
+  var tick = 0;
+  syncInterval = setInterval(function(){
+    tick++;
+    // Vérifier les demandes en attente (admin) toutes les 3s
+    checkPendingFromSB();
+    // Vérifier les messages toutes les 8s
+    if(tick % 3 === 0){
+      sbReq('/rest/v1/messages?order=id.asc').then(function(data){
+        if(data && Array.isArray(data) && data.length > messages.length){
+          messages = data; saveMsgs(); renderMsgList();
+          if(activeConvId) openConv(activeConvId);
         }
       });
     }
-  }, 8000);
+  }, 3000);
 }
 
 // ===== SPLASH =====
@@ -723,89 +831,75 @@ var SPLASH=[{url:'mecanicien.jpg',m:'MECANICIEN'},{url:'electricien.jpg',m:'ELEC
   document.getElementById('sp-skip').onclick=done;
 })();
 
-// ===== MÉMORISER IDENTIFIANTS =====
+// ===== LOGIN =====
 function loadSavedLogin(){
-  var saved = JSON.parse(localStorage.getItem('savedLogin') || 'null');
+  var saved = JSON.parse(localStorage.getItem('savedLogin')||'null');
   if(saved){
-    if(saved.type === 'admin'){
-      document.getElementById('adm-email').value = saved.email || '';
-      document.getElementById('adm-pass').value = saved.pass || '';
-      document.getElementById('adm-remember').checked = true;
-    } else if(saved.type === 'artisan'){
-      switchTab('artisan', document.querySelectorAll('.login-tab')[1]);
-      document.getElementById('art-tel').value = saved.tel || '';
-      document.getElementById('art-code').value = saved.code || '';
-      document.getElementById('art-remember').checked = true;
+    if(saved.type==='admin'){
+      document.getElementById('adm-email').value=saved.email||'';
+      document.getElementById('adm-pass').value=saved.pass||'';
+      document.getElementById('adm-remember').checked=true;
+    } else if(saved.type==='artisan'){
+      switchTab('artisan',document.querySelectorAll('.login-tab')[1]);
+      document.getElementById('art-tel').value=saved.tel||'';
+      document.getElementById('art-code').value=saved.code||'';
+      document.getElementById('art-remember').checked=true;
     }
   }
   showLogin();
 }
-
 function showLogin(){ document.getElementById('login-screen').classList.add('show'); }
-
-function switchTab(tab, btn){
+function switchTab(tab,btn){
   document.querySelectorAll('.login-tab').forEach(function(b){b.classList.remove('active');});
   btn.classList.add('active');
-  document.getElementById('tab-admin-form').style.display = tab==='admin'?'block':'none';
-  document.getElementById('tab-artisan-form').style.display = tab==='artisan'?'block':'none';
-  document.getElementById('tab-register-form').style.display = tab==='register'?'block':'none';
-  document.getElementById('login-err').textContent = '';
-  document.getElementById('login-err').className = 'login-err';
+  document.getElementById('tab-admin-form').style.display=tab==='admin'?'block':'none';
+  document.getElementById('tab-artisan-form').style.display=tab==='artisan'?'block':'none';
+  document.getElementById('tab-register-form').style.display=tab==='register'?'block':'none';
+  document.getElementById('login-err').textContent='';
+  document.getElementById('login-err').className='login-err';
 }
-
 function loginAdmin(){
-  var email = document.getElementById('adm-email').value.trim();
-  var pass = document.getElementById('adm-pass').value.trim();
-  if(email === 'admin@dabou.ci' && pass === adminPass){
-    if(document.getElementById('adm-remember').checked){
-      localStorage.setItem('savedLogin', JSON.stringify({type:'admin',email:email,pass:pass}));
-    } else { localStorage.removeItem('savedLogin'); }
-    currentUser = {type:'admin', nom:'Administrateur'};
+  var email=document.getElementById('adm-email').value.trim(),pass=document.getElementById('adm-pass').value.trim();
+  if(email==='admin@dabou.ci'&&pass===adminPass){
+    if(document.getElementById('adm-remember').checked) localStorage.setItem('savedLogin',JSON.stringify({type:'admin',email:email,pass:pass}));
+    else localStorage.removeItem('savedLogin');
+    currentUser={type:'admin',nom:'Administrateur'};
     startApp();
-  } else {
-    showLoginErr('Email ou mot de passe incorrect');
-  }
+  } else showLoginErr('Email ou mot de passe incorrect');
 }
-
 function loginArtisan(){
-  var tel = document.getElementById('art-tel').value.trim().replace(/\s/g,'');
-  var code = document.getElementById('art-code').value.trim();
-  var found = null;
+  var tel=document.getElementById('art-tel').value.trim().replace(/\s/g,''),code=document.getElementById('art-code').value.trim(),found=null;
   for(var i=0;i<arts.length;i++){var t=(arts[i].tel||'').replace(/\s/g,'');if(t===tel&&String(arts[i].code)===code){found=arts[i];break;}}
   if(found){
-    if(document.getElementById('art-remember').checked){
-      localStorage.setItem('savedLogin', JSON.stringify({type:'artisan',tel:document.getElementById('art-tel').value,code:code}));
-    } else { localStorage.removeItem('savedLogin'); }
-    currentUser = {type:'artisan', nom:found.nom, id:found.id};
+    if(document.getElementById('art-remember').checked) localStorage.setItem('savedLogin',JSON.stringify({type:'artisan',tel:document.getElementById('art-tel').value,code:code}));
+    else localStorage.removeItem('savedLogin');
+    currentUser={type:'artisan',nom:found.nom,id:found.id};
     startApp();
-  } else { showLoginErr('Téléphone ou code incorrect'); }
+  } else showLoginErr('Téléphone ou code incorrect');
 }
-
 function registerArtisan(){
-  var nom=document.getElementById('reg-nom').value.trim();
-  var tel=document.getElementById('reg-tel').value.trim();
-  var met=document.getElementById('reg-met').value.trim();
-  var adr=document.getElementById('reg-adr').value.trim();
-  var code=document.getElementById('reg-code').value.trim();
+  var nom=document.getElementById('reg-nom').value.trim(),tel=document.getElementById('reg-tel').value.trim(),met=document.getElementById('reg-met').value.trim(),adr=document.getElementById('reg-adr').value.trim(),code=document.getElementById('reg-code').value.trim();
   if(!nom||!tel||!met||!code){showLoginErr('Remplissez tous les champs *');return;}
   if(code.length!==4||isNaN(code)){showLoginErr('Le code doit avoir exactement 4 chiffres');return;}
   for(var i=0;i<arts.length;i++){if((arts[i].tel||'').replace(/\s/g,'')===tel.replace(/\s/g,'')){showLoginErr('Ce numéro est déjà enregistré');return;}}
-  var req = {id:Date.now(),nom:nom,tel:tel,met:met,adr:adr,code:code,date:new Date().toLocaleDateString('fr-FR')};
+  var req={id:Date.now(),nom:nom,tel:tel,met:met,adr:adr,code:code,date:new Date().toLocaleDateString('fr-FR')};
   pending.push(req); savePending();
-  // Envoyer sur Supabase pour que l'admin le voit
-  syncPendingToSB(req);
-  showLoginOk('✅ Demande envoyée ! Attendez la validation de l\'admin.');
+  // Envoyer sur Supabase — l'admin verra via polling
+  syncPendingToSB(req).then(function(){
+    showLoginOk('✅ Demande envoyée ! L\'admin va la valider.');
+  }).catch(function(){
+    showLoginOk('✅ Demande enregistrée localement.');
+  });
   document.getElementById('reg-nom').value='';document.getElementById('reg-tel').value='';document.getElementById('reg-met').value='';document.getElementById('reg-adr').value='';document.getElementById('reg-code').value='';
 }
-
-function showLoginErr(msg){ var e=document.getElementById('login-err'); e.textContent=msg; e.className='login-err err'; }
-function showLoginOk(msg){ var e=document.getElementById('login-err'); e.textContent=msg; e.className='login-err ok'; }
+function showLoginErr(msg){var e=document.getElementById('login-err');e.textContent=msg;e.className='login-err err';}
+function showLoginOk(msg){var e=document.getElementById('login-err');e.textContent=msg;e.className='login-err ok';}
 
 function startApp(){
   document.getElementById('login-screen').classList.remove('show');
   document.getElementById('app').classList.add('visible');
-  document.getElementById('user-name').textContent = currentUser.nom;
-  document.getElementById('user-badge').style.display = 'block';
+  document.getElementById('user-name').textContent=currentUser.nom;
+  document.getElementById('user-badge').style.display='block';
   if(currentUser.type==='admin'){
     document.getElementById('btn-add').style.display='inline-flex';
     document.getElementById('pwd-section').style.display='block';
@@ -813,37 +907,36 @@ function startApp(){
   } else {
     document.getElementById('code-section').style.display='block';
   }
-  var info = document.getElementById('account-info');
-  if(currentUser.type==='admin'){ info.innerHTML='<strong>Rôle:</strong> Administrateur<br/><strong>Email:</strong> admin@dabou.ci'; }
-  else { var a=arts.find(function(x){return x.id===currentUser.id;}); if(a) info.innerHTML='<strong>Nom:</strong> '+a.nom+'<br/><strong>Métier:</strong> '+(a.met||'—')+'<br/><strong>Tél:</strong> '+(a.tel||'—'); }
+  var info=document.getElementById('account-info');
+  if(currentUser.type==='admin') info.innerHTML='<strong>Rôle:</strong> Administrateur<br/><strong>Email:</strong> admin@dabou.ci';
+  else {var a=arts.find(function(x){return x.id===currentUser.id;});if(a)info.innerHTML='<strong>Nom:</strong> '+a.nom+'<br/><strong>Métier:</strong> '+(a.met||'—')+'<br/><strong>Tél:</strong> '+(a.tel||'—');}
   loadFromSupabase();
-  startMsgSync();
+  startSyncInterval();
   renderTable(); renderPosts(); renderMsgList();
   showToast('✅ Bienvenue '+currentUser.nom+' !');
 }
-
 function logout(){
-  if(!confirm('Se déconnecter ?')) return;
-  if(msgInterval) clearInterval(msgInterval);
+  if(!confirm('Se déconnecter ?'))return;
+  if(syncInterval) clearInterval(syncInterval);
   currentUser=null;
   document.getElementById('app').classList.remove('visible');
   document.getElementById('user-badge').style.display='none';
   document.getElementById('btn-add').style.display='none';
   document.getElementById('pwd-section').style.display='none';
   document.getElementById('code-section').style.display='none';
+  dismissBanner();
   showLogin();
 }
 
 // ===== DEMANDES EN ATTENTE =====
 function updatePendingNotif(){
-  var dot = document.getElementById('notif-pending');
-  if(pending.length > 0){ dot.textContent=pending.length; dot.classList.add('show'); document.getElementById('pending-section').style.display='block'; }
-  else { dot.classList.remove('show'); document.getElementById('pending-section').style.display='none'; }
+  var dot=document.getElementById('notif-pending');
+  if(pending.length>0){dot.textContent=pending.length;dot.classList.add('show');document.getElementById('pending-section').style.display='block';}
+  else{dot.classList.remove('show');document.getElementById('pending-section').style.display='none';}
 }
-
 function renderPendingList(){
-  var el = document.getElementById('pending-list');
-  if(!pending.length){ document.getElementById('pending-section').style.display='none'; return; }
+  var el=document.getElementById('pending-list');
+  if(!pending.length){document.getElementById('pending-section').style.display='none';return;}
   document.getElementById('pending-section').style.display='block';
   var html='';
   pending.forEach(function(p){
@@ -857,20 +950,17 @@ function renderPendingList(){
   });
   el.innerHTML=html;
 }
-
 function approvePending(id){
-  var req=null; for(var i=0;i<pending.length;i++){if(pending[i].id===id){req=pending[i];break;}}
-  if(!req)return;
+  var req=null;for(var i=0;i<pending.length;i++){if(pending[i].id===id){req=pending[i];break;}}if(!req)return;
   var a={id:Date.now(),nom:req.nom,tel:req.tel,met:req.met,adr:req.adr||'',code:req.code,sta:'Actif',dat:new Date().toISOString().slice(0,10),imm:'',cni:'',bra:'',cer:'',app:0,sex:'',ph:'',sig:'',apprentisNoms:[]};
-  arts.push(a); saveLocal(); syncArtsToSupabase(a);
-  pending=pending.filter(function(p){return p.id!==id;}); savePending(); deletePendingFromSB(id);
-  renderPendingList(); updatePendingNotif(); renderTable();
-  showToast('✅ '+req.nom+' approuvé et enregistré !');
+  arts.push(a);saveLocal();syncArtsToSupabase(a);
+  pending=pending.filter(function(p){return p.id!==id;});savePending();deletePendingFromSB(id);
+  renderPendingList();updatePendingNotif();renderTable();
+  showToast('✅ '+req.nom+' approuvé !');
 }
-
 function rejectPending(id){
-  pending=pending.filter(function(p){return p.id!==id;}); savePending(); deletePendingFromSB(id);
-  renderPendingList(); updatePendingNotif();
+  pending=pending.filter(function(p){return p.id!==id;});savePending();deletePendingFromSB(id);
+  renderPendingList();updatePendingNotif();
   showToast('Demande refusée','#dc2626');
 }
 
@@ -880,34 +970,33 @@ function changePassword(){
   if(old!==adminPass){showToast('Mot de passe actuel incorrect','#dc2626');return;}
   if(nw.length<6){showToast('Minimum 6 caractères','#dc2626');return;}
   if(nw!==conf){showToast('Les mots de passe ne correspondent pas','#dc2626');return;}
-  adminPass=nw; localStorage.setItem('adminPass',adminPass);
+  adminPass=nw;localStorage.setItem('adminPass',adminPass);
   document.getElementById('pwd-old').value='';document.getElementById('pwd-new').value='';document.getElementById('pwd-confirm').value='';
   showToast('✅ Mot de passe changé !');
 }
-
 function changeCode(){
   if(!currentUser||currentUser.type!=='artisan')return;
   var old=document.getElementById('code-old').value.trim(),nw=document.getElementById('code-new').value.trim();
-  var a=null; for(var i=0;i<arts.length;i++){if(arts[i].id===currentUser.id){a=arts[i];break;}}
+  var a=null;for(var i=0;i<arts.length;i++){if(arts[i].id===currentUser.id){a=arts[i];break;}}
   if(!a){showToast('Artisan introuvable','#dc2626');return;}
   if(String(a.code)!==old){showToast('Code actuel incorrect','#dc2626');return;}
   if(nw.length!==4||isNaN(nw)){showToast('Le code doit avoir 4 chiffres','#dc2626');return;}
-  a.code=nw; saveLocal(); syncArtsToSupabase(a);
+  a.code=nw;saveLocal();syncArtsToSupabase(a);
   document.getElementById('code-old').value='';document.getElementById('code-new').value='';
   showToast('✅ Code changé !');
 }
 
 // ===== NAV =====
-function goTab(id, btn){
+function goTab(id,btn){
   document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
   document.querySelectorAll('.nav-tab').forEach(function(b){b.classList.remove('active');});
   document.getElementById('tab-'+id).classList.add('active');
   if(btn) btn.classList.add('active');
   document.getElementById('app-content').scrollTop=0;
-  if(id==='stats')renderCharts();
-  if(id==='conf')renderConf();
-  if(id==='msg')renderMsgList();
-  if(id==='aide')renderAide();
+  if(id==='stats') renderCharts();
+  if(id==='conf') renderConf();
+  if(id==='msg') renderMsgList();
+  if(id==='aide') renderAide();
 }
 
 // ===== SIGNATURE =====
@@ -941,7 +1030,7 @@ function previewPostPh(e){var f=e.target.files[0];if(!f)return;var r=new FileRea
 // ===== FORMULAIRE =====
 function openForm(id){
   if(currentUser&&currentUser.type!=='admin'){showToast('Accès admin uniquement','#dc2626');return;}
-  eid=(id!==undefined)?id:null; phData=null;
+  eid=(id!==undefined)?id:null;phData=null;
   document.getElementById('form-title').textContent=(eid!==null)?'✏️ Modifier':'➕ Ajouter';
   clearSig();
   ['nom','imm','cni','met2','bra','cer','tel','adr','code'].forEach(function(k){document.getElementById('f-'+k).value='';});
@@ -961,16 +1050,14 @@ function openForm(id){
   document.getElementById('modal-art').classList.add('open');
 }
 function closeForm(){document.getElementById('modal-art').classList.remove('open');}
-
 function saveArt(){
   var nom=document.getElementById('f-nom').value.trim(),tel=document.getElementById('f-tel').value.trim();
   if(!nom){alert('Le nom est obligatoire.');return;}if(!tel){alert('Le téléphone est obligatoire.');return;}
   var a={id:eid!==null?eid:Date.now(),nom:nom,imm:document.getElementById('f-imm').value.trim(),cni:document.getElementById('f-cni').value.trim(),met:document.getElementById('f-met2').value.trim(),bra:document.getElementById('f-bra').value.trim(),cer:document.getElementById('f-cer').value.trim(),app:parseInt(document.getElementById('f-app2').value)||0,sex:document.getElementById('f-sex').value,tel:tel,adr:document.getElementById('f-adr').value.trim(),dat:document.getElementById('f-dat').value,sta:document.getElementById('f-sta2').value,code:document.getElementById('f-code').value.trim(),ph:phData||'',sig:getSig(),apprentisNoms:getApprentisNoms()};
   if(eid!==null){var idx=-1;for(var i=0;i<arts.length;i++){if(arts[i].id===eid){idx=i;break;}}if(idx>-1)arts[idx]=a;}else arts.push(a);
-  saveLocal(); syncArtsToSupabase(a); closeForm(); renderTable();
-  showToast('✅ Artisan enregistré et sauvegardé !');
+  saveLocal();syncArtsToSupabase(a);closeForm();renderTable();
+  showToast('✅ Artisan enregistré !');
 }
-
 function delArt(id){
   if(currentUser&&currentUser.type!=='admin'){showToast('Accès admin uniquement','#dc2626');return;}
   if(!confirm('Supprimer cet artisan ?'))return;
@@ -1058,7 +1145,6 @@ function renderMsgList(){
   });
   listEl.innerHTML=html;
 }
-
 function openConv(artId){
   activeConvId=artId;
   var a=null;for(var i=0;i<arts.length;i++){if(arts[i].id===artId){a=arts[i];break;}}
@@ -1070,7 +1156,6 @@ function openConv(artId){
   chatEl.innerHTML='<div class="msg-chat-header">💬 '+(a?a.nom:'Artisan')+'</div><div class="msg-messages" id="msg-msgs">'+html+'</div><div class="msg-input-bar"><input type="text" id="msg-input" placeholder="Votre message..." onkeydown="if(event.key===\'Enter\')sendMsg('+artId+')"/><button class="msg-send" onclick="sendMsg('+artId+')">➤</button></div>';
   var el=document.getElementById('msg-msgs');if(el)el.scrollTop=el.scrollHeight;
 }
-
 function sendMsg(toId){
   var input=document.getElementById('msg-input');if(!input)return;
   var text=input.value.trim();if(!text)return;
@@ -1078,7 +1163,8 @@ function sendMsg(toId){
   var time=new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
   var msg={id:Date.now(),from_id:myId,to_id:String(toId),text:text,time:time};
   messages.push(msg);saveMsgs();input.value='';openConv(toId);
-  sbReq('/rest/v1/messages','POST',msg,{'Prefer':'return=minimal'}).then(function(){showToast('💬 Envoyé !');});
+  sbReq('/rest/v1/messages','POST',msg,{'Prefer':'return=minimal'});
+  showToast('💬 Envoyé !');
 }
 
 // ===== CONFERENCE =====
@@ -1112,7 +1198,6 @@ function openCard(id){
   document.getElementById('c-call').href=t?'tel:'+t:'#';
   document.getElementById('c-wa').href=t?'https://wa.me/'+wa+'?text='+encodeURIComponent('Bonjour '+a.nom+', je vous contacte via la Chambre de Métiers de Dabou.'):'#';
   document.getElementById('c-fb').onclick=function(e){e.preventDefault();var now=Date.now();setTimeout(function(){if(Date.now()-now<2500)window.open('https://www.facebook.com/','_blank');},1500);window.location.href='fb://';};
-  document.getElementById('c-fb').href='#';
   document.getElementById('card-bg').classList.add('open');
 }
 function closeCard(){document.getElementById('card-bg').classList.remove('open');currentCardId=null;}
@@ -1166,72 +1251,40 @@ function exportCSV(){
   var rows=arts.map(function(a,i){return[i+1,a.nom,a.imm,a.cni,a.met,a.bra,a.cer,a.app,(a.apprentisNoms||[]).join(' | '),a.sex,a.tel,a.adr,a.dat,a.sta];});
   var csv='\uFEFF'+[h].concat(rows).map(function(r){return r.map(function(v){return'"'+(v||'')+'"';}).join(',');}).join('\n');
   try{var uri='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);var lnk=document.createElement('a');lnk.href=uri;lnk.download='artisans_dabou.csv';document.body.appendChild(lnk);lnk.click();document.body.removeChild(lnk);}catch(e){}
-  var old=document.getElementById('csv-popup');if(old)old.remove();
-  var div=document.createElement('div');div.id='csv-popup';div.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:5000;display:flex;align-items:center;justify-content:center;padding:16px';
-  div.innerHTML='<div style="background:#fff;border-radius:16px;padding:20px;width:100%;max-width:500px;max-height:85vh;overflow-y:auto"><h3 style="color:#FF8000;margin-bottom:8px">📋 Export CSV</h3><textarea readonly id="csv-text" style="width:100%;height:160px;font-size:.7rem;font-family:monospace;border:1.5px solid #fcd9a0;border-radius:8px;padding:8px;resize:none">'+csv+'</textarea><div style="display:flex;gap:8px;margin-top:10px"><button onclick="var t=document.getElementById(\'csv-text\');t.select();t.setSelectionRange(0,99999);try{navigator.clipboard.writeText(t.value).then(function(){showToast(\'📋 Copié !\');});}catch(e){document.execCommand(\'copy\');showToast(\'📋 Copié !\');}" style="flex:1;padding:10px;background:#009A44;color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer">📋 Copier</button><button onclick="document.getElementById(\'csv-popup\').remove()" style="flex:1;padding:10px;background:#dc2626;color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer">✕</button></div></div>';
-  document.body.appendChild(div);
+  showToast('⬇️ Export CSV lancé !');
 }
 
 // ===== AIDE =====
 var AIDE_DATA=[
-  {ic:'🔐',titre:'Se connecter',color:'#FF8000',etapes:['Ouvrez l\'app — après l\'animation de bienvenue, l\'écran de connexion apparaît automatiquement.','👑 ADMIN : saisissez l\'email "admin@dabou.ci" et votre mot de passe, puis appuyez "Connexion Admin".','🔨 ARTISAN : saisissez votre numéro de téléphone et votre code à 4 chiffres fourni par l\'admin.','📝 S\'INSCRIRE : si vous êtes nouveau, appuyez "S\'inscrire", remplissez le formulaire. L\'admin recevra une notification pour valider.','💾 MÉMORISER : cochez "Se souvenir de moi" pour ne plus saisir vos identifiants à chaque connexion.']},
-  {ic:'📋',titre:'Annuaire',color:'#3b82f6',etapes:['L\'onglet Annuaire affiche tous les artisans enregistrés avec leurs informations complètes.','🔍 Utilisez la barre de recherche pour trouver rapidement un artisan par nom, métier, téléphone ou adresse.','Filtrez par métier ou statut (Actif/Inactif) avec les listes déroulantes.','➕ ADMIN UNIQUEMENT : appuyez "Ajouter" pour enregistrer un nouvel artisan avec photo, signature et code d\'accès.','👁️ Appuyez sur l\'œil pour voir la fiche complète d\'un artisan.','🔔 Les demandes d\'inscription apparaissent en haut avec des boutons Approuver/Refuser.']},
-  {ic:'👤',titre:'Fiche Artisan',color:'#8b5cf6',etapes:['La fiche affiche toutes les informations : nom, métier, CNI, apprentis, signature...','📞 APPELER : compose directement le numéro de l\'artisan.','💬 WHATSAPP : ouvre WhatsApp avec un message pré-rempli.','📘 FACEBOOK : tente d\'ouvrir l\'app Facebook, sinon le navigateur.','📹 GOOGLE MEET : crée une nouvelle salle de réunion vidéo instantanée.','🖨️ IMPRIMER : imprime la carte officielle de l\'artisan.','🔗 PARTAGER : partage la fiche par WhatsApp, SMS ou email.','📲 QR CODE : génère un QR code avec les infos, téléchargeable en image.','📍 LOCALISER : ouvre Google Maps avec l\'adresse de l\'artisan.']},
-  {ic:'📊',titre:'Statistiques',color:'#009A44',etapes:['L\'onglet Stats génère automatiquement 4 graphiques basés sur vos données.','🔨 Artisans par métier — voir quel métier est le plus représenté.','⚧ Répartition homme/femme — visualiser la diversité.','● Actif/Inactif — état des artisans enregistrés.','👥 Apprentis par métier — nombre total d\'apprentis.']},
-  {ic:'🛍️',titre:'Vitrine',color:'#f59e0b',etapes:['La Vitrine permet aux artisans de publier leurs travaux, services et tarifs.','✏️ Appuyez "Publier" pour créer une publication avec titre, description, prix et photo.','📞 Chaque publication a un bouton pour contacter directement l\'artisan.','🔍 Recherchez parmi les publications par mot-clé.','🗑️ Admin et artisan propriétaire peuvent supprimer leurs publications.']},
-  {ic:'💬',titre:'Messagerie',color:'#ec4899',etapes:['La messagerie permet d\'échanger en temps réel entre artisans et l\'admin.','Sélectionnez un artisan dans la liste à gauche pour ouvrir la conversation.','Tapez votre message et appuyez "Envoyer" ou la touche Entrée.','🔄 Les messages se synchronisent automatiquement via Supabase toutes les 8 secondes.','Tous les artisans peuvent écrire à l\'admin et entre eux.']},
-  {ic:'📹',titre:'Vidéoconférence',color:'#1a73e8',etapes:['L\'onglet Conf. utilise Google Meet pour les réunions vidéo.','🏛️ SALLE GÉNÉRALE : appuyez "Créer salle" — Google Meet s\'ouvre dans le navigateur.','📋 Copiez le lien de la salle et partagez-le sur WhatsApp avec vos artisans.','🔨 SALLES PAR MÉTIER : chaque métier a sa propre salle de réunion.','👤 APPEL INDIVIDUEL : crée une salle privée pour un artisan spécifique.']},
-  {ic:'⬇️',titre:'Export CSV',color:'#14b8a6',etapes:['Appuyez "⬇️ CSV" dans l\'Annuaire pour exporter la liste complète des artisans.','Un popup s\'ouvre avec toutes les données. Appuyez "Copier" pour copier.','Collez dans Excel, Google Sheets ou envoyez par WhatsApp.','Sur Android, une boîte "Download" peut apparaître — appuyez "YES" pour télécharger directement.','Le fichier CSV contient toutes les colonnes : noms, métiers, apprentis, contacts...']},
-  {ic:'☁️',titre:'Sauvegarde Cloud',color:'#6366f1',etapes:['Vos données sont sauvegardées sur Supabase (cloud) — elles ne se perdent plus !','✅ Si vous désinstallez et réinstallez l\'app : les artisans sont automatiquement rechargés.','✅ Si vous changez de téléphone : reconnectez-vous et les données reviennent.','⚠️ Les photos et signatures sont stockées localement — pensez à les sauvegarder séparément.','🔄 La synchronisation se fait automatiquement à chaque connexion.']},
-  {ic:'📝',titre:'Inscription artisan',color:'#f97316',etapes:['Un artisan peut s\'inscrire seul depuis l\'écran de connexion en appuyant "S\'inscrire".','Il remplit : nom, téléphone, métier, adresse et choisit un code à 4 chiffres.','La demande est envoyée sur Supabase — l\'admin reçoit une notification automatique.','L\'admin voit la demande dans l\'onglet Annuaire (section rouge en haut) sur son propre téléphone.','L\'admin appuie "Approuver" → l\'artisan peut se connecter immédiatement.']},
-  {ic:'⚙️',titre:'Réglages',color:'#6b7280',etapes:['L\'onglet Réglages permet de gérer votre compte.','🔐 ADMIN : changez votre mot de passe (minimum 6 caractères).','🔑 ARTISAN : changez votre code d\'accès à 4 chiffres.','👤 Vos informations de compte sont affichées.','🚪 Appuyez "Se déconnecter" pour quitter la session en toute sécurité.']}
+  {ic:'🔐',titre:'Se connecter',color:'#FF8000',etapes:['Ouvrez l\'app — après l\'animation de bienvenue, l\'écran de connexion apparaît automatiquement.','👑 ADMIN : saisissez l\'email "admin@dabou.ci" et votre mot de passe, puis appuyez "Connexion Admin".','🔨 ARTISAN : saisissez votre numéro de téléphone et votre code à 4 chiffres fourni par l\'admin.','📝 S\'INSCRIRE : si vous êtes nouveau, appuyez "S\'inscrire", remplissez le formulaire. L\'admin reçoit une notification en temps réel.','💾 MÉMORISER : cochez "Se souvenir de moi" pour ne plus saisir vos identifiants.']},
+  {ic:'📋',titre:'Annuaire',color:'#3b82f6',etapes:['L\'onglet Annuaire affiche tous les artisans enregistrés avec leurs informations complètes.','🔍 Utilisez la barre de recherche pour trouver rapidement un artisan.','Filtrez par métier ou statut avec les listes déroulantes.','➕ ADMIN UNIQUEMENT : appuyez "Ajouter" pour enregistrer un nouvel artisan.','🔔 Les demandes d\'inscription apparaissent en haut en rouge — Approuver ou Refuser.']},
+  {ic:'📊',titre:'Statistiques',color:'#009A44',etapes:['L\'onglet Stats génère 4 graphiques automatiquement.','🔨 Artisans par métier. ⚧ Répartition homme/femme. ● Actif/Inactif. 👥 Apprentis par métier.']},
+  {ic:'🛍️',titre:'Vitrine',color:'#f59e0b',etapes:['Publiez vos travaux, services et tarifs.','✏️ Appuyez "Publier" pour créer une publication avec titre, description, prix et photo.','🗑️ Admin et artisan propriétaire peuvent supprimer leurs publications.']},
+  {ic:'💬',titre:'Messagerie',color:'#ec4899',etapes:['Échangez en temps réel entre artisans et l\'admin.','Sélectionnez un artisan dans la liste pour ouvrir la conversation.','🔄 Messages synchronisés toutes les 8 secondes via Supabase.']},
+  {ic:'📹',titre:'Vidéoconférence',color:'#1a73e8',etapes:['Utilisez Google Meet pour les réunions vidéo.','📋 Copiez le lien et partagez-le sur WhatsApp avec vos artisans.','Salles disponibles : Générale, par Métier, et Individuelle.']},
+  {ic:'☁️',titre:'Sauvegarde Cloud',color:'#6366f1',etapes:['Données sauvegardées sur Supabase — elles ne se perdent plus !','✅ Changement de téléphone : reconnectez-vous et les données reviennent.','🔄 Synchronisation automatique à chaque connexion et toutes les 3 secondes.']}
 ];
-
 function renderAide(){
   var root=document.getElementById('aide-root');
   var html='<input type="text" class="aide-search" placeholder="🔍 Rechercher dans l\'aide..." oninput="filterAide(this.value)"/>';
-  html+='<div class="aide-toc"><div class="aide-toc-title">📑 Sommaire — Cliquez pour aller directement</div><div class="aide-toc-grid">';
+  html+='<div class="aide-toc"><div class="aide-toc-title">📑 Sommaire</div><div class="aide-toc-grid">';
   AIDE_DATA.forEach(function(s,i){html+='<div class="aide-toc-item" style="border-left-color:'+s.color+'" onclick="openAideSection('+i+')">'+s.ic+' '+s.titre+'</div>';});
   html+='</div></div>';
   AIDE_DATA.forEach(function(s,i){
     html+='<div class="aide-section" id="aide-sec-'+i+'"><div class="aide-sec-header" style="background:'+s.color+'" onclick="toggleAideSection('+i+')">'
       +'<span style="font-size:1.5rem">'+s.ic+'</span><span class="aide-sec-title">'+s.titre+'</span><span class="aide-sec-arrow" id="aide-arr-'+i+'">▶</span></div>'
       +'<div class="aide-sec-body" id="aide-body-'+i+'">';
-    s.etapes.forEach(function(e,j){
-      html+='<div class="aide-step"><div class="aide-step-num" style="background:'+s.color+'">'+(j+1)+'</div><div class="aide-step-text">'+e+'</div></div>';
-    });
+    s.etapes.forEach(function(e,j){html+='<div class="aide-step"><div class="aide-step-num" style="background:'+s.color+'">'+(j+1)+'</div><div class="aide-step-text">'+e+'</div></div>';});
     html+='</div></div>';
   });
-  html+='<div style="background:linear-gradient(135deg,var(--or),var(--ve));border-radius:14px;padding:16px;color:#fff;text-align:center;margin-top:4px"><div style="font-size:2rem;margin-bottom:6px">💡</div><strong>Conseil</strong><p style="font-size:.82rem;margin-top:6px;opacity:.9">En cas de problème, fermez et rouvrez l\'app. Vos données sont sauvegardées automatiquement sur le cloud. Pour toute aide contactez l\'administrateur.</p></div>';
   root.innerHTML=html;
 }
-
-function toggleAideSection(i){
-  var body=document.getElementById('aide-body-'+i),arr=document.getElementById('aide-arr-'+i);
-  var isOpen=body.classList.contains('open');
-  body.classList.toggle('open');
-  arr.classList.toggle('open');
-  arr.textContent=isOpen?'▶':'▼';
-}
-
-function openAideSection(i){
-  var sec=document.getElementById('aide-sec-'+i);
-  var body=document.getElementById('aide-body-'+i),arr=document.getElementById('aide-arr-'+i);
-  body.classList.add('open');arr.classList.add('open');arr.textContent='▼';
-  setTimeout(function(){sec.scrollIntoView({behavior:'smooth',block:'start'});},100);
-}
-
-function filterAide(q){
-  q=q.toLowerCase();
-  AIDE_DATA.forEach(function(_,i){
-    var sec=document.getElementById('aide-sec-'+i);
-    var text=sec.textContent.toLowerCase();
-    sec.style.display=(!q||text.includes(q))?'block':'none';
-  });
-}
+function toggleAideSection(i){var body=document.getElementById('aide-body-'+i),arr=document.getElementById('aide-arr-'+i),isOpen=body.classList.contains('open');body.classList.toggle('open');arr.classList.toggle('open');arr.textContent=isOpen?'▶':'▼';}
+function openAideSection(i){var sec=document.getElementById('aide-sec-'+i),body=document.getElementById('aide-body-'+i),arr=document.getElementById('aide-arr-'+i);body.classList.add('open');arr.classList.add('open');arr.textContent='▼';setTimeout(function(){sec.scrollIntoView({behavior:'smooth',block:'start'});},100);}
+function filterAide(q){q=q.toLowerCase();AIDE_DATA.forEach(function(_,i){var sec=document.getElementById('aide-sec-'+i);sec.style.display=(!q||sec.textContent.toLowerCase().includes(q))?'block':'none';});}
 
 // ===== INIT =====
 renderTable();renderPosts();
 </script>
 </body>
-  </html>
+</html>
