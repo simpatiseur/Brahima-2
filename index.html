@@ -9,8 +9,8 @@
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{--or:#FF8000;--ve:#009A44;--or2:#e07000;--ve2:#007a35;--bg:#FFF8F0;--txt:#3d1f00;--gris:#888}
 body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--txt);overscroll-behavior:none}
-html,body{overflow:hidden;height:100%;position:fixed;width:100%}
-#app-root{height:100%;overflow-y:auto;overscroll-behavior-y:contain}
+html,body{overflow:hidden;height:100%}
+#app-root{height:100%;overflow-y:auto;overscroll-behavior:none}
 
 /* SPLASH */
 #splash{position:fixed;inset:0;z-index:9999;background:#000;overflow:hidden;transition:opacity 1s,visibility 1s}
@@ -57,11 +57,11 @@ html,body{overflow:hidden;height:100%;position:fixed;width:100%}
 /* APP */
 #app{display:none;height:100%;flex-direction:column}
 #app.visible{display:flex}
-.nav-tabs{display:flex;background:linear-gradient(to right,var(--or),var(--or2) 45%,var(--ve));flex-shrink:0;box-shadow:0 2px 10px rgba(0,0,0,.2);position:relative;overflow-x:auto;-webkit-overflow-scrolling:touch}
-.nav-tabs::-webkit-scrollbar{display:none}
-.nav-tab{flex:0 0 auto;padding:14px 10px 12px;text-align:center;color:rgba(255,255,255,.7);font-size:.58rem;font-weight:700;cursor:pointer;border:none;background:none;transition:all .2s;border-bottom:3px solid transparent;min-width:60px}
+.nav-tabs{display:flex;background:linear-gradient(to right,var(--or),var(--or2) 45%,var(--ve));flex-shrink:0;box-shadow:0 2px 10px rgba(0,0,0,.2);position:relative}
+.nav-tabs::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(to right,var(--or) 33.33%,#fff 33.33% 66.66%,var(--ve) 66.66%)}
+.nav-tab{flex:1;padding:14px 4px 12px;text-align:center;color:rgba(255,255,255,.7);font-size:.62rem;font-weight:700;cursor:pointer;border:none;background:none;transition:all .2s;border-bottom:3px solid transparent}
 .nav-tab.active{color:#fff;border-bottom-color:#fff}
-.nav-tab .ti{font-size:1rem;display:block;margin-bottom:2px}
+.nav-tab .ti{font-size:1.1rem;display:block;margin-bottom:2px}
 
 /* SECTIONS */
 .app-content{flex:1;overflow-y:auto;overscroll-behavior:none}
@@ -626,11 +626,10 @@ canvas{border:1.5px solid #fcd9a0;border-radius:8px;width:100%;cursor:crosshair;
 var SB_URL = 'https://narfbjdmbvlpxdbzwwkb.supabase.co';
 var SB_KEY = 'sb_publishable_3ZPgNLcgXVqKun7DPetHew_zZs2iM3m';
 
-function sbFetch(path, method, body, extraHeaders){
+function sbFetch(path, method, body) {
   var opts = {method: method || 'GET', headers: {'Content-Type':'application/json','apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY}};
-  if(extraHeaders) Object.assign(opts.headers, extraHeaders);
   if(body) opts.body = JSON.stringify(body);
-  return fetch(SB_URL + path, opts).then(function(r){ return r.status === 204 ? null : r.json(); }).catch(function(){ return null; });
+  return fetch(SB_URL + path, opts).then(function(r){ return r.json(); }).catch(function(){ return null; });
 }
 
 // ===== DONNÉES =====
@@ -797,52 +796,7 @@ function logout(){
 }
 
 // ===== SUPABASE SYNC =====
-// ===== SUPABASE ARTISANS =====
-function syncArtsToSupabase(a){
-  // Upsert artisan dans Supabase
-  var data = {
-    id: String(a.id), nom:a.nom, imm:a.imm||'', cni:a.cni||'',
-    met:a.met||'', bra:a.bra||'', cer:a.cer||'', app:a.app||0,
-    sex:a.sex||'', tel:a.tel||'', adr:a.adr||'', dat:a.dat||'',
-    sta:a.sta||'Actif', code:a.code||'',
-    apprentis_noms:JSON.stringify(a.apprentisNoms||[])
-  };
-  // On ne sauvegarde pas ph et sig car trop lourds pour Supabase (base64)
-  sbFetch('/rest/v1/artisans', 'POST', data, {'Prefer':'resolution=merge-duplicates'});
-}
-
-function deleteArtFromSupabase(id){
-  sbFetch('/rest/v1/artisans?id=eq.'+String(id), 'DELETE');
-}
-
-async function loadArtsFromSupabase(){
-  showSync(true);
-  var data = await sbFetch('/rest/v1/artisans?order=nom.asc', 'GET');
-  showSync(false);
-  if(data && Array.isArray(data) && data.length > 0){
-    // Fusionner avec localStorage (pour garder photos et signatures)
-    data.forEach(function(sb){
-      var local = arts.find(function(a){ return String(a.id)===String(sb.id); });
-      var merged = {
-        id: parseInt(sb.id)||sb.id,
-        nom: sb.nom||'', imm: sb.imm||'', cni: sb.cni||'',
-        met: sb.met||'', bra: sb.bra||'', cer: sb.cer||'',
-        app: sb.app||0, sex: sb.sex||'', tel: sb.tel||'',
-        adr: sb.adr||'', dat: sb.dat||'', sta: sb.sta||'Actif',
-        code: sb.code||'',
-        apprentisNoms: sb.apprentis_noms ? JSON.parse(sb.apprentis_noms) : [],
-        ph: local ? (local.ph||'') : '',
-        sig: local ? (local.sig||'') : ''
-      };
-      var idx = arts.findIndex(function(a){ return String(a.id)===String(sb.id); });
-      if(idx > -1) arts[idx] = merged;
-      else arts.push(merged);
-    });
-    saveLocal();
-    renderTable();
-    showToast('☁️ Données synchronisées !');
-  }
-}
+function syncFromSupabase(){
   showSync(true);
   // Sync messages
   sbFetch('/rest/v1/messages?order=id.asc', 'GET').then(function(data){
@@ -1564,4 +1518,4 @@ function exportCSV(){
 renderTable();renderPosts();renderAide();
 </script>
 </body>
-          </html>
+        </html>
