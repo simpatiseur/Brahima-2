@@ -424,8 +424,8 @@ canvas{border:1.5px solid #fcd9a0;border-radius:8px;width:100%;cursor:crosshair;
           <h3>💾 Sauvegarde manuelle</h3>
           <p style="font-size:.78rem;color:#888;margin-bottom:12px">Exportez toutes vos données en fichier JSON, puis importez-les sur n'importe quelle autre version de l'app.</p>
           <div style="display:flex;gap:8px;flex-wrap:wrap">
-            <button style="flex:1;padding:12px;background:#FF8000;color:#fff;border:none;border-radius:10px;font-size:.9rem;font-weight:700;cursor:pointer" onclick="exportData()">⬇️ Exporter</button>
-            <button style="flex:1;padding:12px;background:#009A44;color:#fff;border:none;border-radius:10px;font-size:.9rem;font-weight:700;cursor:pointer" onclick="importData()">⬆️ Importer</button>
+            <button style="flex:1;padding:12px;background:#FF8000;color:#fff;border:none;border-radius:10px;font-size:.9rem;font-weight:700;cursor:pointer" onclick="alert('export');exportData()">⬇️ Exporter</button>
+            <button style="flex:1;padding:12px;background:#009A44;color:#fff;border:none;border-radius:10px;font-size:.9rem;font-weight:700;cursor:pointer" onclick="alert('import');importData()">⬆️ Importer</button>
           </div>
         </div>
         <button class="btn btn-ro" style="width:100%;padding:14px;margin-top:4px" onclick="logout()">🚪 Se déconnecter</button>
@@ -1248,4 +1248,4 @@ function filterAide(q){q=q.toLowerCase();AIDE_DATA.forEach(function(_,i){var sec
 renderTable();renderPosts();
 </script>
 </body>
-        </html>
+  </html>
