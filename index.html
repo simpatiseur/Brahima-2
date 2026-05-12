@@ -773,12 +773,14 @@ function startApp(){
   loadFromSupabase();startMsgSync();function exportData(){
   var data={arts:arts,posts:posts,messages:messages,pending:pending,adminPass:adminPass};
   var json=JSON.stringify(data);
-  // Utiliser le modal CSV existant comme modèle
   var old=document.getElementById('csv-popup');if(old)old.remove();
   var div=document.createElement('div');
   div.id='csv-popup';
   div.style.position='fixed';
-  div.style.inset='0';
+  div.style.top='0';
+  div.style.left='0';
+  div.style.right='0';
+  div.style.bottom='0';
   div.style.background='rgba(0,0,0,.8)';
   div.style.zIndex='9999';
   div.style.display='flex';
@@ -850,7 +852,10 @@ function importData(){
   var div=document.createElement('div');
   div.id='import-popup';
   div.style.position='fixed';
-  div.style.inset='0';
+  div.style.top='0';
+  div.style.left='0';
+  div.style.right='0';
+  div.style.bottom='0';
   div.style.background='rgba(0,0,0,.8)';
   div.style.zIndex='9999';
   div.style.display='flex';
@@ -1248,4 +1253,4 @@ function filterAide(q){q=q.toLowerCase();AIDE_DATA.forEach(function(_,i){var sec
 renderTable();renderPosts();
 </script>
 </body>
-  </html>
+                                                   </html>
