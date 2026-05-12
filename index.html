@@ -772,36 +772,51 @@ function startApp(){
   else{var a=arts.find(function(x){return x.id===currentUser.id;});if(a)info.innerHTML='<strong>Nom:</strong> '+a.nom+'<br/><strong>Métier:</strong> '+(a.met||'—')+'<br/><strong>Tél:</strong> '+(a.tel||'—');}
   loadFromSupabase();startMsgSync();function exportData(){
   var data={arts:arts,posts:posts,messages:messages,pending:pending,adminPass:adminPass};
-  var json=JSON.stringify(data,null,2);
-  var blob=new Blob([json],{type:'application/json'});
-  var url=URL.createObjectURL(blob);
-  var a=document.createElement('a');
-  a.href=url;a.download='dabou_backup_'+new Date().toISOString().slice(0,10)+'.json';
-  document.body.appendChild(a);a.click();document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-  showToast('✅ Données exportées !');
+  var json=JSON.stringify(data);
+  /* Afficher dans un popup pour copier-coller sur mobile */
+  var old=document.getElementById('backup-popup');if(old)old.remove();
+  var div=document.createElement('div');div.id='backup-popup';
+  div.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:9999;display:flex;align-items:center;justify-content:center;padding:16px';
+  div.innerHTML='<div style="background:#fff;border-radius:16px;padding:20px;width:100%;max-width:500px;max-height:88vh;display:flex;flex-direction:column;gap:10px">'
+    +'<div style="font-weight:700;color:var(--or);font-size:.95rem">💾 Export des données</div>'
+    +'<p style="font-size:.78rem;color:#666">Appuyez longuement sur le texte → Tout sélectionner → Copier. Collez dans un fichier texte (.txt) ou envoyez-vous par WhatsApp.</p>'
+    +'<textarea readonly style="flex:1;min-height:200px;font-size:.65rem;font-family:monospace;border:1.5px solid #fcd9a0;border-radius:8px;padding:8px;resize:none;background:#fff;color:#333">'+json+'</textarea>'
+    +'<div style="display:flex;gap:8px">'
+    +'<button onclick="try{navigator.clipboard.writeText(document.querySelector(\'#backup-popup textarea\').value).then(function(){showToast(\'📋 Copié !\');});}catch(e){document.querySelector(\'#backup-popup textarea\').select();document.execCommand(\'copy\');showToast(\'📋 Copié !\');}" style="flex:1;padding:10px;background:var(--or);color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer">📋 Copier</button>'
+    +'<button onclick="document.getElementById(\'backup-popup\').remove()" style="flex:1;padding:10px;background:#dc2626;color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer">✕ Fermer</button>'
+    +'</div></div>';
+  document.body.appendChild(div);
 }
+
 function importData(){
-  var input=document.createElement('input');
-  input.type='file';input.accept='.json';
-  input.onchange=function(e){
-    var f=e.target.files[0];if(!f)return;
-    var r=new FileReader();
-    r.onload=function(ev){
-      try{
-        var data=JSON.parse(ev.target.result);
-        if(data.arts){arts=data.arts;saveLocal();}
-        if(data.posts){posts=data.posts;savePosts();}
-        if(data.messages){messages=data.messages;saveMsgs();}
-        if(data.pending){pending=data.pending;savePending();}
-        if(data.adminPass){adminPass=data.adminPass;localStorage.setItem('adminPass',adminPass);}
-        renderTable();renderPosts();renderMsgList();
-        showToast('✅ '+( data.arts?data.arts.length:0)+' artisans importés !');
-      }catch(err){showToast('❌ Fichier invalide','#dc2626');}
-    };
-    r.readAsText(f);
-  };
-  document.body.appendChild(input);input.click();document.body.removeChild(input);
+  var old=document.getElementById('import-popup');if(old)old.remove();
+  var div=document.createElement('div');div.id='import-popup';
+  div.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:9999;display:flex;align-items:center;justify-content:center;padding:16px';
+  div.innerHTML='<div style="background:#fff;border-radius:16px;padding:20px;width:100%;max-width:500px;max-height:88vh;display:flex;flex-direction:column;gap:10px">'
+    +'<div style="font-weight:700;color:var(--ve);font-size:.95rem">⬆️ Import des données</div>'
+    +'<p style="font-size:.78rem;color:#666">Collez ici le texte copié depuis l\'export, puis appuyez Importer.</p>'
+    +'<textarea id="import-text" placeholder="Collez les données ici..." style="flex:1;min-height:200px;font-size:.65rem;font-family:monospace;border:1.5px solid #fcd9a0;border-radius:8px;padding:8px;resize:none;background:#fff;color:#333"></textarea>'
+    +'<div style="display:flex;gap:8px">'
+    +'<button onclick="doImport()" style="flex:1;padding:10px;background:var(--ve);color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer">✅ Importer</button>'
+    +'<button onclick="document.getElementById(\'import-popup\').remove()" style="flex:1;padding:10px;background:#dc2626;color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer">✕ Annuler</button>'
+    +'</div></div>';
+  document.body.appendChild(div);
+}
+
+function doImport(){
+  var txt=document.getElementById('import-text').value.trim();
+  if(!txt){showToast('❌ Collez d\'abord les données','#dc2626');return;}
+  try{
+    var data=JSON.parse(txt);
+    if(data.arts){arts=data.arts;saveLocal();}
+    if(data.posts){posts=data.posts;savePosts();}
+    if(data.messages){messages=data.messages;saveMsgs();}
+    if(data.pending){pending=data.pending;savePending();}
+    if(data.adminPass){adminPass=data.adminPass;localStorage.setItem('adminPass',adminPass);}
+    document.getElementById('import-popup').remove();
+    renderTable();renderPosts();renderMsgList();
+    showToast('✅ '+(data.arts?data.arts.length:0)+' artisans importés !');
+  }catch(e){showToast('❌ Données invalides. Vérifiez le texte.','#dc2626');}
 }
 renderTable();renderPosts();renderMsgList();
   showToast('✅ Bienvenue '+currentUser.nom+' !');
@@ -1126,4 +1141,4 @@ function filterAide(q){q=q.toLowerCase();AIDE_DATA.forEach(function(_,i){var sec
 renderTable();renderPosts();
 </script>
 </body>
-                                                           </html>
+                                                                           </html>
