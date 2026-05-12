@@ -240,7 +240,53 @@ canvas{border:1.5px solid #fcd9a0;border-radius:8px;width:100%;cursor:crosshair;
 .art-loc-item{display:flex;align-items:center;gap:10px;padding:10px;border-radius:10px;border:1px solid #fcd9a0;margin-bottom:8px;cursor:pointer}
 .art-loc-item:hover{background:#fff8f0}
 
-/* AIDE */
+/* COTISATIONS */
+.cotis-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;padding:16px}
+.cotis-card{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 2px 10px rgba(247,127,0,.1)}
+.cotis-card-header{padding:14px 16px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #fff3e0}
+.cotis-av{width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid var(--or);flex-shrink:0}
+.cotis-av-ph{width:44px;height:44px;border-radius:50%;background:#fff3e0;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+.cotis-info .cn{font-size:.9rem;font-weight:700}
+.cotis-info .cm{font-size:.75rem;color:var(--or)}
+.cotis-months{display:grid;grid-template-columns:repeat(6,1fr);gap:5px;padding:12px 14px}
+.cotis-month{aspect-ratio:1;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:.6rem;font-weight:700;cursor:pointer;transition:all .2s;border:1.5px solid #eee}
+.cotis-month.paye{background:var(--ve);color:#fff;border-color:var(--ve)}
+.cotis-month.impaye{background:#fff3e0;color:var(--or);border-color:#fcd9a0}
+.cotis-month.retard{background:#fee2e2;color:#dc2626;border-color:#fca5a5}
+.cotis-footer{padding:10px 14px;background:#fff8f0;display:flex;justify-content:space-between;align-items:center;font-size:.78rem}
+.cotis-badge{padding:4px 10px;border-radius:20px;font-size:.72rem;font-weight:700}
+.cotis-stats{display:flex;flex-wrap:wrap;gap:10px;padding:0 16px 14px}
+.cotis-stat{background:#fff;border-radius:10px;padding:12px 16px;flex:1;min-width:120px;text-align:center;box-shadow:0 2px 6px rgba(247,127,0,.1)}
+.cotis-stat .v{font-size:1.5rem;font-weight:700;color:var(--or)}
+.cotis-stat .l{font-size:.7rem;color:#888;margin-top:2px}
+
+/* ANIMATIONS */
+.section{animation:none}
+.section.active{animation:fadeSlideIn .3s ease forwards}
+@keyframes fadeSlideIn{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:translateX(0)}}
+.section.slide-left{animation:slideFromLeft .3s ease forwards}
+@keyframes slideFromLeft{from{opacity:0;transform:translateX(-30px)}to{opacity:1;transform:translateX(0)}}
+
+.stat-card{transition:transform .2s,box-shadow .2s}
+.stat-card:active{transform:scale(.97)}
+.btn{transition:all .18s}
+.btn:active{transform:scale(.95);opacity:.85}
+.cbt{transition:transform .15s,box-shadow .15s}
+.cbt:active{transform:scale(.93)}
+.nav-tab{transition:all .2s}
+.acard{animation:cardIn .35s cubic-bezier(.34,1.56,.64,1)}
+.msg-bubble{animation:bubbleIn .2s ease}
+@keyframes bubbleIn{from{opacity:0;transform:scale(.85) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.post-card{transition:transform .2s,box-shadow .2s}
+.post-card:active{transform:scale(.98)}
+.art-loc-item{transition:background .15s,transform .15s}
+.art-loc-item:active{transform:scale(.98)}
+.conf-art-item{transition:all .2s}
+.conf-art-item:active{transform:scale(.95)}
+
+/* Indicateur de swipe */
+.swipe-hint{position:fixed;bottom:70px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.5);color:#fff;padding:6px 16px;border-radius:20px;font-size:.72rem;pointer-events:none;opacity:0;transition:opacity .3s;z-index:200}
+.swipe-hint.show{opacity:1}
 .aide-search{width:100%;padding:10px 16px;border:1.5px solid var(--or);border-radius:25px;font-size:.88rem;outline:none;margin-bottom:14px}
 .aide-toc{background:#fff;border-radius:14px;padding:14px;box-shadow:0 2px 8px rgba(247,127,0,.1);margin-bottom:14px}
 .aide-toc-title{font-size:.85rem;font-weight:700;color:var(--or);margin-bottom:10px}
@@ -351,6 +397,7 @@ canvas{border:1.5px solid #fcd9a0;border-radius:8px;width:100%;cursor:crosshair;
     <button class="nav-tab" onclick="goTab('vitrine',this)"><span class="ti">🛍️</span>Vitrine</button>
     <button class="nav-tab" onclick="goTab('msg',this)"><span class="ti">💬</span>Messages</button>
     <button class="nav-tab" onclick="goTab('conf',this)"><span class="ti">📹</span>Conf.</button>
+    <button class="nav-tab" onclick="goTab('cotisations',this)"><span class="ti">💰</span>Cotis.</button>
     <button class="nav-tab" onclick="goTab('settings',this)"><span class="ti">⚙️</span>Réglages</button>
     <button class="nav-tab" onclick="goTab('aide',this)"><span class="ti">❓</span>Aide</button>
   </nav>
@@ -459,6 +506,23 @@ canvas{border:1.5px solid #fcd9a0;border-radius:8px;width:100%;cursor:crosshair;
         </div>
         <button class="btn btn-ro" style="width:100%;padding:14px;margin-top:4px" onclick="logout()">🚪 Se déconnecter</button>
       </div>
+    </div>
+
+    <!-- COTISATIONS -->
+    <div class="section" id="tab-cotisations">
+      <div class="sec-header"><div style="font-size:2rem">💰</div><h1>Cotisations</h1><p>Suivi des paiements des artisans</p></div>
+      <div style="padding:12px 16px 0;display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+        <select id="cotis-year" onchange="renderCotisations()" style="padding:8px 12px;border:1.5px solid var(--or);border-radius:8px;font-size:.85rem;background:#fff"></select>
+        <input type="number" id="cotis-montant" placeholder="Montant mensuel (FCFA)" style="flex:1;min-width:160px;padding:8px 12px;border:1.5px solid var(--or);border-radius:8px;font-size:.85rem" value="2000" onchange="renderCotisations()"/>
+        <button class="btn btn-or btn-sm" onclick="exportCotisCSV()">⬇️ CSV</button>
+      </div>
+      <div class="cotis-stats" style="margin-top:12px">
+        <div class="cotis-stat"><div class="v" id="cs-total">0</div><div class="l">Total attendu</div></div>
+        <div class="cotis-stat"><div class="v" id="cs-paye" style="color:var(--ve)">0</div><div class="l">Payé</div></div>
+        <div class="cotis-stat"><div class="v" id="cs-impaye" style="color:#dc2626">0</div><div class="l">Impayé</div></div>
+        <div class="cotis-stat"><div class="v" id="cs-taux">0%</div><div class="l">Taux paiement</div></div>
+      </div>
+      <div class="cotis-grid" id="cotis-grid"></div>
     </div>
 
     <!-- AIDE -->
@@ -899,6 +963,8 @@ function changeCode(){
 
 // ===== NAV =====
 function goTab(id, btn){
+  currentTabIdx = TABS.indexOf(id);
+  if(currentTabIdx === -1) currentTabIdx = 0;
   document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
   document.querySelectorAll('.nav-tab').forEach(function(b){b.classList.remove('active');});
   document.getElementById('tab-'+id).classList.add('active');
@@ -908,6 +974,7 @@ function goTab(id, btn){
   if(id==='conf')renderConf();
   if(id==='msg')renderMsgList();
   if(id==='aide')renderAide();
+  if(id==='cotisations')renderCotisations();
 }
 
 // ===== SIGNATURE =====
@@ -1230,8 +1297,154 @@ function filterAide(q){
   });
 }
 
-// ===== INIT =====
-renderTable();renderPosts();
+// ===== COTISATIONS =====
+var cotisations = JSON.parse(localStorage.getItem('cotisations') || '{}');
+function saveCotis(){ localStorage.setItem('cotisations', JSON.stringify(cotisations)); }
+
+function initCotisYear(){
+  var sel = document.getElementById('cotis-year');
+  if(!sel) return;
+  var yr = new Date().getFullYear();
+  sel.innerHTML = '';
+  for(var y = yr+1; y >= yr-3; y--){
+    var opt = document.createElement('option');
+    opt.value = y; opt.textContent = y;
+    if(y === yr) opt.selected = true;
+    sel.appendChild(opt);
+  }
+}
+
+function toggleCotis(artId, mois){
+  var yr = document.getElementById('cotis-year').value;
+  var key = yr+'-'+artId;
+  if(!cotisations[key]) cotisations[key] = {};
+  cotisations[key][mois] = !cotisations[key][mois];
+  saveCotis(); renderCotisations();
+}
+
+function renderCotisations(){
+  initCotisYear();
+  var yr = parseInt(document.getElementById('cotis-year').value);
+  var montant = parseInt(document.getElementById('cotis-montant').value) || 2000;
+  var grid = document.getElementById('cotis-grid');
+  if(!arts.length){ grid.innerHTML='<div style="text-align:center;padding:40px;color:#ccc">Aucun artisan enregistré</div>'; return; }
+  var totalPaye=0, totalAttendu=0, moisActuel=new Date().getMonth();
+  var html='';
+  arts.forEach(function(a){
+    var key = yr+'-'+a.id;
+    var paiements = cotisations[key] || {};
+    var nbPaye=0, nbAttendu = yr < new Date().getFullYear() ? 12 : moisActuel+1;
+    totalAttendu += nbAttendu * montant;
+    var moisHtml='';
+    for(var m=0;m<12;m++){
+      var paye = !!paiements[m];
+      var futur = yr === new Date().getFullYear() && m > moisActuel;
+      var statut = futur ? 'futur' : (paye ? 'paye' : (m <= moisActuel ? 'retard' : 'impaye'));
+      if(paye) nbPaye++;
+      moisHtml+='<div class="cotis-month '+statut+'" onclick="'+(futur?'':' toggleCotis('+a.id+','+m+')')+'" title="'+MOIS[m]+(paye?' ✅':(!futur?' ❌':''))+'">'+MOIS[m]+(paye?'<span style="font-size:.55rem">✓</span>':'')+'</div>';
+    }
+    totalPaye += nbPaye * montant;
+    var montantPaye = nbPaye * montant;
+    var montantDu = (nbAttendu - nbPaye) * montant;
+    var pct = nbAttendu > 0 ? Math.round(nbPaye/nbAttendu*100) : 0;
+    var statColor = pct===100?'var(--ve)':pct>=50?'var(--or)':'#dc2626';
+    html+='<div class="cotis-card">'
+      +'<div class="cotis-card-header">'+(a.ph?'<img class="cotis-av" src="'+a.ph+'"/>':'<div class="cotis-av-ph">👤</div>')
+      +'<div class="cotis-info"><div class="cn">'+a.nom+'</div><div class="cm">🔨 '+(a.met||'Artisan')+'</div></div>'
+      +'<div style="margin-left:auto;text-align:center"><div style="font-size:1.1rem;font-weight:800;color:'+statColor+'">'+pct+'%</div><div style="font-size:.65rem;color:#999">payé</div></div></div>'
+      +'<div class="cotis-months">'+moisHtml+'</div>'
+      +'<div class="cotis-footer">'
+      +'<span style="color:var(--ve);font-weight:700">✅ '+montantPaye.toLocaleString()+' FCFA</span>'
+      +'<span style="color:#dc2626;font-weight:700">❌ '+montantDu.toLocaleString()+' FCFA</span>'
+      +'</div></div>';
+  });
+  grid.innerHTML=html;
+  document.getElementById('cs-total').textContent=totalAttendu.toLocaleString()+' F';
+  document.getElementById('cs-paye').textContent=totalPaye.toLocaleString()+' F';
+  document.getElementById('cs-impaye').textContent=(totalAttendu-totalPaye).toLocaleString()+' F';
+  document.getElementById('cs-taux').textContent=totalAttendu>0?Math.round(totalPaye/totalAttendu*100)+'%':'0%';
+}
+
+function exportCotisCSV(){
+  var yr = document.getElementById('cotis-year').value;
+  var montant = parseInt(document.getElementById('cotis-montant').value)||2000;
+  var h=['Nom','Métier'].concat(MOIS).concat(['Total Payé (FCFA)','Total Dû (FCFA)']);
+  var rows=arts.map(function(a){
+    var key=yr+'-'+a.id, p=cotisations[key]||{};
+    var moisData=MOIS.map(function(_,m){return p[m]?'Payé':'Impayé';});
+    var nbP=Object.values(p).filter(Boolean).length;
+    return[a.nom,a.met||'—'].concat(moisData).concat([nbP*montant,(12-nbP)*montant]);
+  });
+  var csv='\uFEFF'+[h].concat(rows).map(function(r){return r.map(function(v){return'"'+(v||'')+'"';}).join(',');}).join('\n');
+  try{var uri='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);var lnk=document.createElement('a');lnk.href=uri;lnk.download='cotisations_'+yr+'.csv';document.body.appendChild(lnk);lnk.click();document.body.removeChild(lnk);}catch(e){}
+  showToast('✅ Export cotisations '+yr+' !');
+}
+
+// ===== ANIMATIONS SWIPE =====
+var swipeDir = 'left';
+var origGoTab = goTab;
+function goTab(id, btn){
+  var newIdx = TABS.indexOf(id);
+  var sec = document.getElementById('tab-'+id);
+  if(sec){
+    sec.classList.remove('slide-left');
+    if(newIdx < currentTabIdx){ sec.classList.add('slide-left'); }
+    else { sec.classList.remove('slide-left'); }
+  }
+  currentTabIdx = newIdx >= 0 ? newIdx : 0;
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.nav-tab').forEach(function(b){b.classList.remove('active');});
+  document.getElementById('tab-'+id).classList.add('active');
+  if(btn) btn.classList.add('active');
+  document.getElementById('app-content').scrollTop=0;
+  if(id==='stats')renderCharts();
+  if(id==='conf')renderConf();
+  if(id==='msg')renderMsgList();
+  if(id==='aide')renderAide();
+  if(id==='cotisations')renderCotisations();
+}
+
+// Indicateur swipe au démarrage
+function showSwipeHint(){
+  var hint = document.createElement('div');
+  hint.className='swipe-hint show';
+  hint.textContent='← Glissez pour changer d\'onglet →';
+  document.body.appendChild(hint);
+  setTimeout(function(){hint.classList.remove('show');setTimeout(function(){hint.remove();},400);},3000);
+}
+var TABS = ['annuaire','stats','vitrine','msg','conf','cotisations','settings','aide'];
+var MOIS = ['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'];
+// ===== SWIPE ENTRE ONGLETS =====
+var currentTabIdx = 0;
+var swipeStartX = 0, swipeStartY = 0, swipeStartTime = 0;
+
+var appContent = document.getElementById('app-content');
+
+appContent.addEventListener('touchstart', function(e){
+  swipeStartX = e.touches[0].clientX;
+  swipeStartY = e.touches[0].clientY;
+  swipeStartTime = Date.now();
+}, {passive:true});
+
+appContent.addEventListener('touchend', function(e){
+  var dx = e.changedTouches[0].clientX - swipeStartX;
+  var dy = e.changedTouches[0].clientY - swipeStartY;
+  var dt = Date.now() - swipeStartTime;
+  // Swipe horizontal rapide et plus grand que vertical
+  if(dt < 400 && Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5){
+    if(dx < 0 && currentTabIdx < TABS.length - 1){
+      // Swipe gauche → onglet suivant
+      currentTabIdx++;
+    } else if(dx > 0 && currentTabIdx > 0){
+      // Swipe droit → onglet précédent
+      currentTabIdx--;
+    }
+    var tabs = document.querySelectorAll('.nav-tab');
+    goTab(TABS[currentTabIdx], tabs[currentTabIdx]);
+    // Scroll le nav pour montrer l'onglet actif
+    tabs[currentTabIdx].scrollIntoView({behavior:'smooth', block:'nearest', inline:'center'});
+  }
+}, {passive:true});
 </script>
 </body>
-                                                                    </html>
+  </html>
