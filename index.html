@@ -8,8 +8,7 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{--or:#FF8000;--ve:#009A44;--or2:#e07000;--ve2:#007a35;--bg:#FFF8F0;--txt:#3d1f00;--gris:#888}
-body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--txt);position:fixed;inset:0;overflow:hidden}
-#app-wrap{position:fixed;inset:0;display:flex;flex-direction:column;overflow:hidden}
+body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--txt);overscroll-behavior-y:contain;overflow-y:auto;}
 
 /* SPLASH */
 #splash{position:fixed;inset:0;z-index:9999;background:#000;overflow:hidden;transition:opacity .8s,visibility .8s}
@@ -279,7 +278,25 @@ canvas{border:1.5px solid #fcd9a0;border-radius:8px;width:100%;cursor:crosshair;
 #pending-badge{background:#dc2626;color:#fff;border-radius:50%;width:16px;height:16px;font-size:.6rem;font-weight:700;display:none;align-items:center;justify-content:center;position:absolute;top:8px;right:4px}
 #pending-badge.show{display:flex}
 
-@media print{body>*:not(#pz){display:none!important}#pz{display:block!important;padding:20px;max-width:400px;margin:auto;border:2px solid var(--or);border-radius:12px}}
+@media print{body>*:not(#pz){display:none!important}#pz{display:block!important;padding:20px;max-width:400px;margin:auto;border:2px solid var(--or);border-radius:12px}} 
+/* Bouton flottant pour remonter */
+#btnTop {
+    display: none; 
+    position: fixed; 
+    bottom: 85px; 
+    right: 20px; 
+    z-index: 999; 
+    background: var(--ve); 
+    color: #fff; 
+    border: none; 
+    width: 45px; 
+    height: 45px; 
+    border-radius: 50%; 
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    font-size: 20px;
+    cursor: pointer;
+}
+
 </style>
 </head>
 <body>
@@ -643,6 +660,9 @@ function deleteArtFromSB(id){ sbReq('/rest/v1/artisans?id=eq.'+String(id), 'DELE
 function syncPendingToSB(p){
   var d = {id:String(p.id),nom:p.nom,tel:p.tel,met:p.met,adr:p.adr||'',code:p.code};
   sbReq('/rest/v1/pending_artisans', 'POST', d, {'Prefer':'resolution=merge-duplicates'});
+    // Notification locale si l'inscription réussit
+  alert("✅ Inscription envoyée avec succès !");
+
 }
 function deletePendingFromSB(id){ sbReq('/rest/v1/pending_artisans?id=eq.'+String(id), 'DELETE'); }
 
@@ -1232,6 +1252,32 @@ function filterAide(q){
 
 // ===== INIT =====
 renderTable();renderPosts();
-</script>
+  /* --- GESTION DU SCROLL ET BOUTON TOP --- */
+// On récupère l'élément qui contient le contenu (app-content dans ton CSS)
+var contentArea = document.querySelector('.app-content');
+
+if (contentArea) {
+    contentArea.onscroll = function() {
+        var b = document.getElementById("btnTop");
+        if (b) {
+            // Si on a défilé de plus de 300px, on montre le bouton
+            if (contentArea.scrollTop > 300) {
+                b.style.display = "block";
+            } else {
+                b.style.display = "none";
+            }
+        }
+    };
+}
+
+// Fonction pour remonter en haut doucement
+function remonter() {
+    var area = document.querySelector('.app-content');
+    if (area) area.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+</script> 
+<button id="btnTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">↑</button>
+
 </body>
         </html>
