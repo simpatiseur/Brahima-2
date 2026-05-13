@@ -1119,26 +1119,7 @@ function sendMsg(toId){
 
   showToast('💬 Envoyé !');
     }
-function openConv(artId){
-  activeConvId=artId;
-  var a=null;for(var i=0;i<arts.length;i++){if(arts[i].id===artId){a=arts[i];break;}}
-  renderMsgList();
-  var myId=currentUser?(String(currentUser.id||'admin')):'admin';
-  var conv=messages.filter(function(m){var f=String(m.from_id||m.from),t=String(m.to_id||m.to);return(f===myId&&t===String(artId))||(f===String(artId)&&t===myId);});
-  var html=conv.length?conv.map(function(m){return'<div class="msg-bubble '+(String(m.from_id||m.from)===myId?'sent':'recv')+'">'+m.text+'<div class="msg-time">'+(m.time||'')+'</div></div>';}).join(''):'<div style="text-align:center;color:#ccc;font-size:.82rem;padding:20px">Démarrez la conversation</div>';
-  var chatEl=document.getElementById('msg-chat');
-  chatEl.innerHTML='<div class="msg-chat-header">💬 '+(a?a.nom:'Artisan')+'</div><div class="msg-messages" id="msg-msgs">'+html+'</div><div class="msg-input-bar"><input type="text" id="msg-input" placeholder="Votre message..." onkeydown="if(event.key===\'Enter\')sendMsg('+artId+')"/><button class="msg-send" onclick="sendMsg('+artId+')">➤</button></div>';
-  var el=document.getElementById('msg-msgs');if(el)el.scrollTop=el.scrollHeight;
-}
-function sendMsg(toId){
-  var input=document.getElementById('msg-input');if(!input)return;
-  var text=input.value.trim();if(!text)return;
-  var myId=currentUser?(String(currentUser.id||'admin')):'admin';
-  var time=new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
-  var msg={id:Date.now(),from_id:myId,to_id:String(toId),text:text,time:time};
-  messages.push(msg);saveMsgs();input.value='';openConv(toId);
-  sbReq('/rest/v1/messages','POST',msg,{'Prefer':'return=minimal'}).then(function(){showToast('💬 Envoyé !');});
-}
+
 function renderConf(){
   var mets=[];arts.forEach(function(a){if(a.met&&mets.indexOf(a.met)===-1)mets.push(a.met);});
   var rEl=document.getElementById('conf-metier-rooms');
