@@ -12,8 +12,7 @@
 html{color-scheme:light only!important;background:#FFF8F0!important;}
 body{font-family:system-ui,sans-serif;background:#FFF8F0!important;color:#3d1f00!important;min-height:100vh;overflow-x:hidden;}
 .stat-card,table,.modal,.login-box,.conf-card,.chart-card,.post-card,.msg-list,.msg-input-bar,.settings-card,.aide-section,.aide-toc,.acard,.qr-box,.map-box{background:#fff!important;}
-td{color:#3d1f00!important;}
-tr:hover td{background:#fff8f0!important;}
+td{color:#3d1f00!important;}tr:hover td{background:#fff8f0!important;}
 input,select,textarea{background:#fff!important;color:#3d1f00!important;}
 .fsec,.cbox,.csig,.conf-art-item,.aide-sec-body,.art-loc-item{background:#fff8f0!important;}
 .msg-bubble.recv{background:#fff!important;color:#3d1f00!important;}
@@ -89,10 +88,8 @@ input,select,textarea{background:#fff!important;color:#3d1f00!important;}
 .toolbar{display:flex;flex-wrap:wrap;gap:10px;padding:0 16px 16px;align-items:center}
 .toolbar input,.toolbar select{flex:1;min-width:140px;padding:10px 12px;border:1.5px solid var(--or);border-radius:8px;font-size:.88rem;background:#fff;color:var(--txt)}
 .btn{padding:10px 16px;border:none;border-radius:8px;cursor:pointer;font-size:.85rem;font-weight:700;transition:all .2s;display:inline-flex;align-items:center;gap:5px}
-.btn-or{background:var(--or);color:#fff}
-.btn-ve{background:var(--ve);color:#fff}
-.btn-ro{background:#dc2626;color:#fff}
-.btn-gr{background:#6b7280;color:#fff}
+.btn-or{background:var(--or);color:#fff}.btn-ve{background:var(--ve);color:#fff}
+.btn-ro{background:#dc2626;color:#fff}.btn-gr{background:#6b7280;color:#fff}
 .btn-sm{padding:6px 10px;font-size:.76rem}
 .table-wrap{overflow-x:auto;padding:0 16px 16px;scrollbar-width:thin;scrollbar-color:var(--or) #fff3e0}
 .table-wrap::-webkit-scrollbar{height:5px;display:block}
@@ -103,8 +100,7 @@ th{background:linear-gradient(to right,var(--or),var(--or2));color:#fff;padding:
 td{padding:9px;border-bottom:1px solid #fff3e0;vertical-align:middle}
 tr:last-child td{border-bottom:none}
 .badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:.73rem;font-weight:600}
-.badge-a{background:#d1fae5;color:var(--ve)}
-.badge-i{background:#fee2e2;color:#dc2626}
+.badge-a{background:#d1fae5;color:var(--ve)}.badge-i{background:#fee2e2;color:#dc2626}
 .av{width:46px;height:46px;border-radius:50%;object-fit:cover;border:2px solid var(--or)}
 .av-ph{width:46px;height:46px;border-radius:50%;background:#fff3e0;display:flex;align-items:center;justify-content:center;font-size:1.2rem}
 .empty td{text-align:center;color:#ccc;padding:30px}
@@ -240,7 +236,6 @@ canvas{border:1.5px solid #fcd9a0;border-radius:8px;width:100%;cursor:crosshair;
 .aide-section{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.08);margin-bottom:14px}
 .aide-sec-header{padding:14px 16px;display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none}
 .aide-sec-title{font-size:.95rem;font-weight:800;color:#fff;flex:1}
-.aide-sec-arrow{color:#fff;font-size:.9rem;transition:transform .2s}
 .aide-sec-body{padding:14px;display:none;background:#fff}
 .aide-sec-body.open{display:block}
 .aide-step{display:flex;gap:12px;align-items:flex-start;margin-bottom:14px}
@@ -270,29 +265,15 @@ canvas{border:1.5px solid #fcd9a0;border-radius:8px;width:100%;cursor:crosshair;
   <button onclick="goToAnnuaire()">Voir →</button>
   <button onclick="hideNotifBanner()" style="background:rgba(0,0,0,.2)">✕</button>
 </div>
-
 <div id="splash">
   <button id="sp-skip">Passer ✕</button>
   <div id="sp-slides"></div>
-  <div id="sp-top">
-    <span class="sp-icon">⚒️</span>
-    <div class="sp-title">Chambre de Métiers de Dabou</div>
-    <div class="sp-sub">Annuaire Officiel · Côte d'Ivoire 🇨🇮</div>
-  </div>
-  <div id="sp-bot">
-    <div class="sp-met" id="sp-met">—</div>
-    <div class="sp-dots" id="sp-dots"></div>
-    <div class="sp-bar"><div class="sp-fill" id="sp-fill"></div></div>
-  </div>
+  <div id="sp-top"><span class="sp-icon">⚒️</span><div class="sp-title">Chambre de Métiers de Dabou</div><div class="sp-sub">Annuaire Officiel · Côte d'Ivoire 🇨🇮</div></div>
+  <div id="sp-bot"><div class="sp-met" id="sp-met">—</div><div class="sp-dots" id="sp-dots"></div><div class="sp-bar"><div class="sp-fill" id="sp-fill"></div></div></div>
 </div>
-
 <div id="login-screen">
   <div class="login-box">
-    <div class="login-logo">
-      <span class="ic">⚒️</span>
-      <h2>Chambre de Métiers de Dabou</h2>
-      <p>Connectez-vous pour continuer</p>
-    </div>
+    <div class="login-logo"><span class="ic">⚒️</span><h2>Chambre de Métiers de Dabou</h2><p>Connectez-vous pour continuer</p></div>
     <div class="login-tabs">
       <button class="login-tab active" onclick="switchTab('admin',this)">👑 Admin</button>
       <button class="login-tab" onclick="switchTab('artisan',this)">🔨 Artisan</button>
@@ -322,9 +303,8 @@ canvas{border:1.5px solid #fcd9a0;border-radius:8px;width:100%;cursor:crosshair;
     <div class="login-err" id="login-err"></div>
   </div>
 </div>
-
 <div id="app">
-  <nav class="nav-tabs" id="nav-tabs">
+  <nav class="nav-tabs">
     <button class="nav-tab active" onclick="goTab('annuaire',this)"><span class="ti">📋</span>Annuaire<span class="notif-dot" id="notif-pending">0</span></button>
     <button class="nav-tab" onclick="goTab('stats',this)"><span class="ti">📊</span>Stats</button>
     <button class="nav-tab" onclick="goTab('vitrine',this)"><span class="ti">🛍️</span>Vitrine</button>
@@ -372,10 +352,7 @@ canvas{border:1.5px solid #fcd9a0;border-radius:8px;width:100%;cursor:crosshair;
     </div>
     <div class="section" id="tab-vitrine">
       <div class="sec-header"><div style="font-size:2rem">🛍️</div><h1>Vitrine des Artisans</h1><p>Activités et services</p></div>
-      <div class="toolbar">
-        <input type="text" id="post-search" placeholder="🔍 Rechercher..." oninput="renderPosts()" style="flex:1"/>
-        <button class="btn btn-ve" onclick="openPostModal()">✏️ Publier</button>
-      </div>
+      <div class="toolbar"><input type="text" id="post-search" placeholder="🔍 Rechercher..." oninput="renderPosts()" style="flex:1"/><button class="btn btn-ve" onclick="openPostModal()">✏️ Publier</button></div>
       <div class="posts-grid" id="posts-grid"><div class="no-posts"><span class="ni">🛍️</span>Aucune publication</div></div>
     </div>
     <div class="section" id="tab-msg">
@@ -388,9 +365,7 @@ canvas{border:1.5px solid #fcd9a0;border-radius:8px;width:100%;cursor:crosshair;
     <div class="section" id="tab-conf">
       <div class="sec-header"><div style="font-size:2rem">📹</div><h1>Vidéoconférence</h1><p>Réunions entre artisans</p></div>
       <div class="conf-section">
-        <div class="conf-card">
-          <h3>🏛️ Salle Générale</h3>
-          <p>Réunion ouverte à tous. Partagez le lien avec vos artisans.</p>
+        <div class="conf-card"><h3>🏛️ Salle Générale</h3><p>Réunion ouverte à tous.</p>
           <div style="display:flex;gap:8px;flex-wrap:wrap">
             <button class="btn btn-or btn-sm" onclick="window.open('https://meet.google.com/new','_blank')">📹 Créer salle</button>
             <button class="btn btn-ve btn-sm" onclick="shareText('Rejoignez la réunion Chambre de Métiers de Dabou sur Google Meet !')">📤 Partager</button>
@@ -422,10 +397,10 @@ canvas{border:1.5px solid #fcd9a0;border-radius:8px;width:100%;cursor:crosshair;
         </div>
         <div class="settings-card">
           <h3>💾 Sauvegarde manuelle</h3>
-          <p style="font-size:.78rem;color:#888;margin-bottom:12px">Exportez toutes vos données en fichier JSON, puis importez-les sur n'importe quelle autre version de l'app.</p>
-          <div style="display:flex;gap:8px;flex-wrap:wrap">
-            <button style="flex:1;padding:12px;background:#FF8000;color:#fff;border:none;border-radius:10px;font-size:.9rem;font-weight:700;cursor:pointer" onclick="alert('export');exportData()">⬇️ Exporter</button>
-            <button style="flex:1;padding:12px;background:#009A44;color:#fff;border:none;border-radius:10px;font-size:.9rem;font-weight:700;cursor:pointer" onclick="alert('import');importData()">⬆️ Importer</button>
+          <p style="font-size:.78rem;color:#888;margin-bottom:12px">Exportez toutes vos données, puis importez-les sur une autre version de l'app.</p>
+          <div style="display:flex;gap:8px">
+            <button style="flex:1;padding:12px;background:#FF8000;color:#fff;border:none;border-radius:10px;font-size:.9rem;font-weight:700" onclick="exportData()">⬇️ Exporter</button>
+            <button style="flex:1;padding:12px;background:#009A44;color:#fff;border:none;border-radius:10px;font-size:.9rem;font-weight:700" onclick="importData()">⬆️ Importer</button>
           </div>
         </div>
         <button class="btn btn-ro" style="width:100%;padding:14px;margin-top:4px" onclick="logout()">🚪 Se déconnecter</button>
@@ -475,9 +450,7 @@ canvas{border:1.5px solid #fcd9a0;border-radius:8px;width:100%;cursor:crosshair;
 <div class="modal-bg" id="post-modal">
   <div class="modal">
     <div class="mhdr"><h2 style="color:var(--ve)">✏️ Nouvelle Publication</h2><button class="xcls" onclick="closePostModal()">✕</button></div>
-    <div class="fsec" style="border-left-color:var(--ve)"><h3 style="color:var(--ve)">👤 Artisan</h3>
-      <select id="post-art-sel" style="width:100%"><option value="">-- Choisir --</option></select>
-    </div>
+    <div class="fsec" style="border-left-color:var(--ve)"><h3 style="color:var(--ve)">👤 Artisan</h3><select id="post-art-sel" style="width:100%"><option value="">-- Choisir --</option></select></div>
     <div class="fsec" style="border-left-color:var(--ve)"><h3 style="color:var(--ve)">📝 Publication</h3>
       <div class="fg" style="margin-bottom:10px"><label>Titre *</label><input type="text" id="post-titre"/></div>
       <div class="fg" style="margin-bottom:10px"><label>Description</label><textarea id="post-desc" rows="3" style="resize:vertical"></textarea></div>
@@ -487,10 +460,7 @@ canvas{border:1.5px solid #fcd9a0;border-radius:8px;width:100%;cursor:crosshair;
         <input type="file" id="post-ph-inp" accept="image/*" style="display:none" onchange="previewPostPh(event)"/>
       </div>
     </div>
-    <div class="mftr">
-      <button class="btn" style="background:#f5f5f5;color:#555" onclick="closePostModal()">Annuler</button>
-      <button class="btn btn-ve" onclick="savePost()">🚀 Publier</button>
-    </div>
+    <div class="mftr"><button class="btn" style="background:#f5f5f5;color:#555" onclick="closePostModal()">Annuler</button><button class="btn btn-ve" onclick="savePost()">🚀 Publier</button></div>
   </div>
 </div>
 
@@ -519,25 +489,11 @@ canvas{border:1.5px solid #fcd9a0;border-radius:8px;width:100%;cursor:crosshair;
       </div>
       <div class="csig"><div class="cl">Signature</div><div id="c-sig"></div></div>
     </div>
-    <div class="cbts">
-      <a class="cbt cbt-call" id="c-call" href="#"><span class="i">📞</span>Appeler</a>
-      <a class="cbt cbt-wa" id="c-wa" href="#" target="_blank"><span class="i">💬</span>WhatsApp</a>
-    </div>
-    <div class="cbts">
-      <a class="cbt cbt-fb" id="c-fb" href="#"><span class="i">📘</span>Facebook</a>
-      <button class="cbt cbt-meet" onclick="startMeetCall()"><span class="i">📹</span>Google Meet</button>
-    </div>
-    <div class="cbts">
-      <button class="cbt cbt-print" onclick="printCard()"><span class="i">🖨️</span>Imprimer</button>
-      <button class="cbt cbt-share" onclick="shareCard()"><span class="i">🔗</span>Partager</button>
-    </div>
-    <div class="cbts">
-      <button class="cbt cbt-qr" onclick="showQR()"><span class="i">📲</span>QR Code</button>
-      <button class="cbt cbt-loc" onclick="locateArtisan()"><span class="i">📍</span>Localiser</button>
-    </div>
-    <div class="cbts" style="padding-bottom:14px">
-      <button class="cbt cbt-close" onclick="closeCard()" style="grid-column:span 2"><span class="i">✕</span>Fermer</button>
-    </div>
+    <div class="cbts"><a class="cbt cbt-call" id="c-call" href="#"><span class="i">📞</span>Appeler</a><a class="cbt cbt-wa" id="c-wa" href="#" target="_blank"><span class="i">💬</span>WhatsApp</a></div>
+    <div class="cbts"><a class="cbt cbt-fb" id="c-fb" href="#"><span class="i">📘</span>Facebook</a><button class="cbt cbt-meet" onclick="startMeetCall()"><span class="i">📹</span>Google Meet</button></div>
+    <div class="cbts"><button class="cbt cbt-print" onclick="printCard()"><span class="i">🖨️</span>Imprimer</button><button class="cbt cbt-share" onclick="shareCard()"><span class="i">🔗</span>Partager</button></div>
+    <div class="cbts"><button class="cbt cbt-qr" onclick="showQR()"><span class="i">📲</span>QR Code</button><button class="cbt cbt-loc" onclick="locateArtisan()"><span class="i">📍</span>Localiser</button></div>
+    <div class="cbts" style="padding-bottom:14px"><button class="cbt cbt-close" onclick="closeCard()" style="grid-column:span 2"><span class="i">✕</span>Fermer</button></div>
   </div>
 </div>
 
@@ -570,22 +526,116 @@ var pending=JSON.parse(localStorage.getItem('pending')||'[]');
 var adminPass=localStorage.getItem('adminPass')||'admin123';
 var currentUser=null,eid=null,phData=null,postPhData=null;
 var currentCardId=null,activeConvId=null,myCharts={},msgInterval=null;
-var lastPendingCount=0;
+
 function saveLocal(){localStorage.setItem('arts',JSON.stringify(arts));}
 function savePosts(){localStorage.setItem('posts',JSON.stringify(posts));}
 function saveMsgs(){localStorage.setItem('messages',JSON.stringify(messages));}
 function savePending(){localStorage.setItem('pending',JSON.stringify(pending));}
 function showToast(msg,color){var t=document.getElementById('toast');t.textContent=msg;t.style.background=color||'#009A44';t.classList.add('show');setTimeout(function(){t.classList.remove('show');},3000);}
 function showSync(on){var d=document.getElementById('sync-dot');d.style.display=on?'block':'none';if(on)d.classList.add('syncing');else d.classList.remove('syncing');}
-function showNotifBanner(msg){document.getElementById('notif-text').textContent=msg;document.getElementById('notif-banner').classList.add('show');setTimeout(hideNotifBanner,8000);if(navigator.vibrate)navigator.vibrate([200,100,200]);if(typeof Notification!=='undefined'&&Notification.permission==='granted'){new Notification('Chambre de Métiers de Dabou',{body:msg,icon:'mecanicien.jpg'});}}
+function showNotifBanner(msg){document.getElementById('notif-text').textContent=msg;document.getElementById('notif-banner').classList.add('show');setTimeout(hideNotifBanner,8000);if(navigator.vibrate)navigator.vibrate([200,100,200]);}
 function hideNotifBanner(){document.getElementById('notif-banner').classList.remove('show');}
 function goToAnnuaire(){hideNotifBanner();goTab('annuaire',document.querySelectorAll('.nav-tab')[0]);document.getElementById('app-content').scrollTop=0;}
-function askNotifPermission(){if(typeof Notification!=='undefined'&&Notification.permission==='default'){Notification.requestPermission();}}
+function askNotifPermission(){if(typeof Notification!=='undefined'&&Notification.permission==='default')Notification.requestPermission();}
 function sbReq(path,method,body,extra){var h={'Content-Type':'application/json','apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY};if(extra)Object.keys(extra).forEach(function(k){h[k]=extra[k];});var opts={method:method||'GET',headers:h};if(body)opts.body=JSON.stringify(body);return fetch(SB_URL+path,opts).then(function(r){return r.status===204?null:r.json();}).catch(function(){return null;});}
 function syncArtsToSupabase(a){var d={id:String(a.id),nom:a.nom,imm:a.imm||'',cni:a.cni||'',met:a.met||'',bra:a.bra||'',cer:a.cer||'',app:a.app||0,sex:a.sex||'',tel:a.tel||'',adr:a.adr||'',dat:a.dat||'',sta:a.sta||'Actif',code:a.code||'',apprentis_noms:JSON.stringify(a.apprentisNoms||[])};sbReq('/rest/v1/artisans','POST',d,{'Prefer':'resolution=merge-duplicates'});}
 function deleteArtFromSB(id){sbReq('/rest/v1/artisans?id=eq.'+String(id),'DELETE');}
 function syncPendingToSB(p){var d={id:String(p.id),nom:p.nom,tel:p.tel,met:p.met,adr:p.adr||'',code:p.code};sbReq('/rest/v1/pending_artisans','POST',d,{'Prefer':'resolution=merge-duplicates'});}
 function deletePendingFromSB(id){sbReq('/rest/v1/pending_artisans?id=eq.'+String(id),'DELETE');}
+
+/* ===== EXPORT / IMPORT ===== */
+function exportData(){
+  var data={arts:arts,posts:posts,messages:messages,pending:pending,adminPass:adminPass};
+  var json=JSON.stringify(data);
+  var old=document.getElementById('backup-popup');if(old)old.remove();
+  var wrap=document.createElement('div');
+  wrap.id='backup-popup';
+  wrap.style.position='fixed';wrap.style.top='0';wrap.style.left='0';
+  wrap.style.right='0';wrap.style.bottom='0';
+  wrap.style.background='rgba(0,0,0,.8)';wrap.style.zIndex='9999';
+  wrap.style.display='flex';wrap.style.alignItems='center';
+  wrap.style.justifyContent='center';wrap.style.padding='16px';
+  var box=document.createElement('div');
+  box.style.background='#fff';box.style.borderRadius='16px';
+  box.style.padding='20px';box.style.width='100%';
+  box.style.maxWidth='500px';box.style.maxHeight='85vh';box.style.overflowY='auto';
+  var h=document.createElement('div');h.style.fontWeight='700';h.style.color='#FF8000';h.style.marginBottom='8px';h.textContent='💾 Exporter — Copiez ce texte';
+  var p=document.createElement('p');p.style.fontSize='.78rem';p.style.color='#666';p.style.marginBottom='10px';p.textContent='Appuyez "Copier" puis sauvegardez dans Notes ou WhatsApp.';
+  var ta=document.createElement('textarea');
+  ta.readOnly=true;ta.value=json;
+  ta.style.width='100%';ta.style.height='160px';ta.style.fontSize='.65rem';
+  ta.style.fontFamily='monospace';ta.style.border='1.5px solid #fcd9a0';
+  ta.style.borderRadius='8px';ta.style.padding='8px';ta.style.resize='none';
+  ta.style.background='#fff';ta.style.color='#333';ta.style.display='block';ta.style.marginBottom='10px';
+  var row=document.createElement('div');row.style.display='flex';row.style.gap='8px';
+  var bc=document.createElement('button');
+  bc.textContent='📋 Copier';bc.style.flex='1';bc.style.padding='10px';
+  bc.style.background='#FF8000';bc.style.color='#fff';bc.style.border='none';
+  bc.style.borderRadius='10px';bc.style.fontWeight='700';bc.style.fontSize='.9rem';
+  bc.onclick=function(){ta.select();ta.setSelectionRange(0,99999);try{navigator.clipboard.writeText(ta.value).then(function(){showToast('📋 Copié !');});}catch(e){document.execCommand('copy');showToast('📋 Copié !');}};
+  var bf=document.createElement('button');
+  bf.textContent='✕ Fermer';bf.style.flex='1';bf.style.padding='10px';
+  bf.style.background='#dc2626';bf.style.color='#fff';bf.style.border='none';
+  bf.style.borderRadius='10px';bf.style.fontWeight='700';bf.style.fontSize='.9rem';
+  bf.onclick=function(){wrap.remove();};
+  row.appendChild(bc);row.appendChild(bf);
+  box.appendChild(h);box.appendChild(p);box.appendChild(ta);box.appendChild(row);
+  wrap.appendChild(box);
+  document.body.appendChild(wrap);
+}
+
+function importData(){
+  var old=document.getElementById('import-popup');if(old)old.remove();
+  var wrap=document.createElement('div');
+  wrap.id='import-popup';
+  wrap.style.position='fixed';wrap.style.top='0';wrap.style.left='0';
+  wrap.style.right='0';wrap.style.bottom='0';
+  wrap.style.background='rgba(0,0,0,.8)';wrap.style.zIndex='9999';
+  wrap.style.display='flex';wrap.style.alignItems='center';
+  wrap.style.justifyContent='center';wrap.style.padding='16px';
+  var box=document.createElement('div');
+  box.style.background='#fff';box.style.borderRadius='16px';
+  box.style.padding='20px';box.style.width='100%';
+  box.style.maxWidth='500px';box.style.maxHeight='85vh';box.style.overflowY='auto';
+  var h=document.createElement('div');h.style.fontWeight='700';h.style.color='#009A44';h.style.marginBottom='8px';h.textContent='⬆️ Importer — Collez le texte';
+  var p=document.createElement('p');p.style.fontSize='.78rem';p.style.color='#666';p.style.marginBottom='10px';p.textContent='Collez le texte copié depuis l\'export puis appuyez Importer.';
+  var ta=document.createElement('textarea');
+  ta.placeholder='Collez les données ici...';
+  ta.style.width='100%';ta.style.height='160px';ta.style.fontSize='.65rem';
+  ta.style.fontFamily='monospace';ta.style.border='1.5px solid #fcd9a0';
+  ta.style.borderRadius='8px';ta.style.padding='8px';ta.style.resize='none';
+  ta.style.background='#fff';ta.style.color='#333';ta.style.display='block';ta.style.marginBottom='10px';
+  var row=document.createElement('div');row.style.display='flex';row.style.gap='8px';
+  var bi=document.createElement('button');
+  bi.textContent='✅ Importer';bi.style.flex='1';bi.style.padding='10px';
+  bi.style.background='#009A44';bi.style.color='#fff';bi.style.border='none';
+  bi.style.borderRadius='10px';bi.style.fontWeight='700';bi.style.fontSize='.9rem';
+  bi.onclick=function(){
+    var txt=ta.value.trim();
+    if(!txt){showToast('❌ Collez d\'abord les données','#dc2626');return;}
+    try{
+      var d=JSON.parse(txt);
+      if(d.arts){arts=d.arts;saveLocal();}
+      if(d.posts){posts=d.posts;savePosts();}
+      if(d.messages){messages=d.messages;saveMsgs();}
+      if(d.pending){pending=d.pending;savePending();}
+      if(d.adminPass){adminPass=d.adminPass;localStorage.setItem('adminPass',adminPass);}
+      wrap.remove();
+      renderTable();renderPosts();renderMsgList();
+      showToast('✅ '+(d.arts?d.arts.length:0)+' artisans importés !');
+    }catch(e){showToast('❌ Données invalides','#dc2626');}
+  };
+  var bf=document.createElement('button');
+  bf.textContent='✕ Annuler';bf.style.flex='1';bf.style.padding='10px';
+  bf.style.background='#dc2626';bf.style.color='#fff';bf.style.border='none';
+  bf.style.borderRadius='10px';bf.style.fontWeight='700';bf.style.fontSize='.9rem';
+  bf.onclick=function(){wrap.remove();};
+  row.appendChild(bi);row.appendChild(bf);
+  box.appendChild(h);box.appendChild(p);box.appendChild(ta);box.appendChild(row);
+  wrap.appendChild(box);
+  document.body.appendChild(wrap);
+}
+/* ===== FIN EXPORT/IMPORT ===== */
 
 function loadFromSupabase(){
   showSync(true);
@@ -610,7 +660,6 @@ function loadFromSupabase(){
       savePending();
       if(currentUser&&currentUser.type==='admin'){renderPendingList();updatePendingNotif();}
     }
-    lastPendingCount=pending.length;
   });
   sbReq('/rest/v1/messages?order=id.asc').then(function(data){
     if(data&&Array.isArray(data)&&data.length>0){messages=data;saveMsgs();renderMsgList();if(activeConvId)openConv(activeConvId);}
@@ -674,79 +723,39 @@ function loginAdmin(){
     if(document.getElementById('adm-remember').checked)localStorage.setItem('savedLogin',JSON.stringify({type:'admin',email:email,pass:pass}));
     else localStorage.removeItem('savedLogin');
     currentUser={type:'admin',nom:'Administrateur'};startApp();
-  }else{showLoginErr('Email ou mot de passe incorrect');}
+  }else showLoginErr('Email ou mot de passe incorrect');
 }
-
-/* ===== LOGIN ARTISAN CORRIGÉ ===== */
 function loginArtisan(){
   var telRaw=document.getElementById('art-tel').value.trim();
   var tel=telRaw.replace(/\s/g,'');
   var code=document.getElementById('art-code').value.trim();
   if(!tel||!code){showLoginErr('Remplissez le téléphone et le code');return;}
-
-  /* 1. Chercher en LOCAL d'abord */
   var found=null;
-  for(var i=0;i<arts.length;i++){
-    var t=(arts[i].tel||'').replace(/\s/g,'');
-    if(t===tel&&String(arts[i].code)===code){found=arts[i];break;}
-  }
+  for(var i=0;i<arts.length;i++){var t=(arts[i].tel||'').replace(/\s/g,'');if(t===tel&&String(arts[i].code)===code){found=arts[i];break;}}
   if(found){_doLoginArtisan(found,telRaw,code);return;}
-
-  /* 2. Pas trouvé → chercher sur SUPABASE */
   showLoginErr('Vérification en cours...');
-
-  /* Tous les formats possibles du numéro */
-  var telVariants=[tel, telRaw, tel.replace(/(\d{2})(?=\d)/g,'$1 ').trim()];
-  if(tel.startsWith('0')) telVariants.push('225'+tel.slice(1));
-  if(tel.startsWith('225')) telVariants.push('0'+tel.slice(3));
-
-  sbReq('/rest/v1/artisans?code=eq.'+encodeURIComponent(code)+'&select=*')
-    .then(function(data){
-      if(!data||!Array.isArray(data)||data.length===0){showLoginErr('Téléphone ou code incorrect');return;}
-
-      /* Comparer sans espaces des deux côtés */
-      var match=null;
-      for(var j=0;j<data.length;j++){
-        var sbTelClean=(data[j].tel||'').replace(/\s/g,'');
-        var sbTelRaw=(data[j].tel||'').trim();
-        if(sbTelClean===tel||sbTelRaw===telRaw||telVariants.indexOf(sbTelClean)!==-1||telVariants.indexOf(sbTelRaw)!==-1){
-          match=data[j];break;
-        }
-      }
-      if(!match){showLoginErr('Téléphone ou code incorrect');return;}
-
-      /* Reconstruire l'artisan */
-      var a={
-        id:parseInt(match.id)||match.id,
-        nom:match.nom||'',imm:match.imm||'',cni:match.cni||'',
-        met:match.met||'',bra:match.bra||'',cer:match.cer||'',
-        app:match.app||0,sex:match.sex||'',tel:match.tel||'',
-        adr:match.adr||'',dat:match.dat||'',sta:match.sta||'Actif',
-        code:match.code||'',
-        apprentisNoms:match.apprentis_noms?JSON.parse(match.apprentis_noms):[],
-        ph:'',sig:''
-      };
-
-      /* Sauvegarder en local pour la prochaine fois */
-      var idx=-1;
-      for(var k=0;k<arts.length;k++){if(String(arts[k].id)===String(a.id)){idx=k;break;}}
-      if(idx>-1)arts[idx]=a;else arts.push(a);
-      saveLocal();
-
-      _doLoginArtisan(a,telRaw,code);
-    })
-    .catch(function(){showLoginErr('Erreur réseau. Vérifiez votre connexion.');});
+  var telVariants=[tel,telRaw,tel.replace(/(\d{2})(?=\d)/g,'$1 ').trim()];
+  if(tel.startsWith('0'))telVariants.push('225'+tel.slice(1));
+  if(tel.startsWith('225'))telVariants.push('0'+tel.slice(3));
+  sbReq('/rest/v1/artisans?code=eq.'+encodeURIComponent(code)+'&select=*').then(function(data){
+    if(!data||!Array.isArray(data)||data.length===0){showLoginErr('Téléphone ou code incorrect');return;}
+    var match=null;
+    for(var j=0;j<data.length;j++){
+      var sbTelClean=(data[j].tel||'').replace(/\s/g,''),sbTelRaw=(data[j].tel||'').trim();
+      if(sbTelClean===tel||sbTelRaw===telRaw||telVariants.indexOf(sbTelClean)!==-1||telVariants.indexOf(sbTelRaw)!==-1){match=data[j];break;}
+    }
+    if(!match){showLoginErr('Téléphone ou code incorrect');return;}
+    var a={id:parseInt(match.id)||match.id,nom:match.nom||'',imm:match.imm||'',cni:match.cni||'',met:match.met||'',bra:match.bra||'',cer:match.cer||'',app:match.app||0,sex:match.sex||'',tel:match.tel||'',adr:match.adr||'',dat:match.dat||'',sta:match.sta||'Actif',code:match.code||'',apprentisNoms:match.apprentis_noms?JSON.parse(match.apprentis_noms):[],ph:'',sig:''};
+    var idx=-1;for(var k=0;k<arts.length;k++){if(String(arts[k].id)===String(a.id)){idx=k;break;}}
+    if(idx>-1)arts[idx]=a;else arts.push(a);
+    saveLocal();_doLoginArtisan(a,telRaw,code);
+  }).catch(function(){showLoginErr('Erreur réseau.');});
 }
-
 function _doLoginArtisan(found,telRaw,code){
-  if(document.getElementById('art-remember').checked)
-    localStorage.setItem('savedLogin',JSON.stringify({type:'artisan',tel:telRaw,code:code}));
+  if(document.getElementById('art-remember').checked)localStorage.setItem('savedLogin',JSON.stringify({type:'artisan',tel:telRaw,code:code}));
   else localStorage.removeItem('savedLogin');
-  currentUser={type:'artisan',nom:found.nom,id:found.id};
-  startApp();
+  currentUser={type:'artisan',nom:found.nom,id:found.id};startApp();
 }
-/* ===== FIN CORRECTION ===== */
-
 function registerArtisan(){
   var nom=document.getElementById('reg-nom').value.trim(),tel=document.getElementById('reg-tel').value.trim(),met=document.getElementById('reg-met').value.trim(),adr=document.getElementById('reg-adr').value.trim(),code=document.getElementById('reg-code').value.trim();
   if(!nom||!tel||!met||!code){showLoginErr('Remplissez tous les champs *');return;}
@@ -766,171 +775,11 @@ function startApp(){
   document.getElementById('user-name').textContent=currentUser.nom;
   document.getElementById('user-badge').style.display='block';
   if(currentUser.type==='admin'){document.getElementById('btn-add').style.display='inline-flex';document.getElementById('pwd-section').style.display='block';renderPendingList();updatePendingNotif();askNotifPermission();}
-  else{document.getElementById('code-section').style.display='block';}
+  else document.getElementById('code-section').style.display='block';
   var info=document.getElementById('account-info');
-  if(currentUser.type==='admin'){info.innerHTML='<strong>Rôle:</strong> Administrateur<br/><strong>Email:</strong> admin@dabou.ci';}
+  if(currentUser.type==='admin')info.innerHTML='<strong>Rôle:</strong> Administrateur<br/><strong>Email:</strong> admin@dabou.ci';
   else{var a=arts.find(function(x){return x.id===currentUser.id;});if(a)info.innerHTML='<strong>Nom:</strong> '+a.nom+'<br/><strong>Métier:</strong> '+(a.met||'—')+'<br/><strong>Tél:</strong> '+(a.tel||'—');}
-  loadFromSupabase();startMsgSync();function exportData(){
-  var data={arts:arts,posts:posts,messages:messages,pending:pending,adminPass:adminPass};
-  var json=JSON.stringify(data);
-  var old=document.getElementById('csv-popup');if(old)old.remove();
-  var div=document.createElement('div');
-  div.id='csv-popup';
-  div.style.position='fixed';
-  div.style.top='0';
-  div.style.left='0';
-  div.style.right='0';
-  div.style.bottom='0';
-  div.style.background='rgba(0,0,0,.8)';
-  div.style.zIndex='9999';
-  div.style.display='flex';
-  div.style.alignItems='center';
-  div.style.justifyContent='center';
-  div.style.padding='16px';
-  var box=document.createElement('div');
-  box.style.background='#fff';
-  box.style.borderRadius='16px';
-  box.style.padding='20px';
-  box.style.width='100%';
-  box.style.maxWidth='500px';
-  box.style.maxHeight='85vh';
-  box.style.overflowY='auto';
-  var ta=document.createElement('textarea');
-  ta.id='export-ta';
-  ta.readOnly=true;
-  ta.value=json;
-  ta.style.width='100%';
-  ta.style.height='180px';
-  ta.style.fontSize='.65rem';
-  ta.style.fontFamily='monospace';
-  ta.style.border='1.5px solid #fcd9a0';
-  ta.style.borderRadius='8px';
-  ta.style.padding='8px';
-  ta.style.resize='none';
-  ta.style.background='#fff';
-  ta.style.color='#333';
-  ta.style.display='block';
-  ta.style.marginBottom='10px';
-  var titre=document.createElement('div');
-  titre.style.fontWeight='700';
-  titre.style.color='#FF8000';
-  titre.style.marginBottom='8px';
-  titre.textContent='💾 Export — Copiez ce texte';
-  var info=document.createElement('p');
-  info.style.fontSize='.78rem';
-  info.style.color='#666';
-  info.style.marginBottom='10px';
-  info.textContent='Appuyez "Copier" puis sauvegardez dans Notes ou WhatsApp.';
-  var row=document.createElement('div');
-  row.style.display='flex';row.style.gap='8px';
-  var btnCopy=document.createElement('button');
-  btnCopy.textContent='📋 Copier';
-  btnCopy.style.flex='1';btnCopy.style.padding='10px';
-  btnCopy.style.background='#FF8000';btnCopy.style.color='#fff';
-  btnCopy.style.border='none';btnCopy.style.borderRadius='10px';
-  btnCopy.style.fontWeight='700';btnCopy.style.fontSize='.9rem';
-  btnCopy.onclick=function(){
-    ta.select();ta.setSelectionRange(0,99999);
-    try{navigator.clipboard.writeText(ta.value).then(function(){showToast('📋 Copié !');});}
-    catch(e){document.execCommand('copy');showToast('📋 Copié !');}
-  };
-  var btnClose=document.createElement('button');
-  btnClose.textContent='✕ Fermer';
-  btnClose.style.flex='1';btnClose.style.padding='10px';
-  btnClose.style.background='#dc2626';btnClose.style.color='#fff';
-  btnClose.style.border='none';btnClose.style.borderRadius='10px';
-  btnClose.style.fontWeight='700';btnClose.style.fontSize='.9rem';
-  btnClose.onclick=function(){div.remove();};
-  row.appendChild(btnCopy);row.appendChild(btnClose);
-  box.appendChild(titre);box.appendChild(info);box.appendChild(ta);box.appendChild(row);
-  div.appendChild(box);
-  document.body.appendChild(div);
-}
-
-function importData(){
-  var old=document.getElementById('import-popup');if(old)old.remove();
-  var div=document.createElement('div');
-  div.id='import-popup';
-  div.style.position='fixed';
-  div.style.top='0';
-  div.style.left='0';
-  div.style.right='0';
-  div.style.bottom='0';
-  div.style.background='rgba(0,0,0,.8)';
-  div.style.zIndex='9999';
-  div.style.display='flex';
-  div.style.alignItems='center';
-  div.style.justifyContent='center';
-  div.style.padding='16px';
-  var box=document.createElement('div');
-  box.style.background='#fff';
-  box.style.borderRadius='16px';
-  box.style.padding='20px';
-  box.style.width='100%';
-  box.style.maxWidth='500px';
-  box.style.maxHeight='85vh';
-  box.style.overflowY='auto';
-  var ta=document.createElement('textarea');
-  ta.id='import-ta';
-  ta.placeholder='Collez les données ici...';
-  ta.style.width='100%';
-  ta.style.height='180px';
-  ta.style.fontSize='.65rem';
-  ta.style.fontFamily='monospace';
-  ta.style.border='1.5px solid #fcd9a0';
-  ta.style.borderRadius='8px';
-  ta.style.padding='8px';
-  ta.style.resize='none';
-  ta.style.background='#fff';
-  ta.style.color='#333';
-  ta.style.display='block';
-  ta.style.marginBottom='10px';
-  var titre=document.createElement('div');
-  titre.style.fontWeight='700';
-  titre.style.color='#009A44';
-  titre.style.marginBottom='8px';
-  titre.textContent='⬆️ Import — Collez le texte';
-  var info=document.createElement('p');
-  info.style.fontSize='.78rem';
-  info.style.color='#666';
-  info.style.marginBottom='10px';
-  info.textContent='Collez le texte copié depuis l\'export puis appuyez Importer.';
-  var row=document.createElement('div');
-  row.style.display='flex';row.style.gap='8px';
-  var btnImp=document.createElement('button');
-  btnImp.textContent='✅ Importer';
-  btnImp.style.flex='1';btnImp.style.padding='10px';
-  btnImp.style.background='#009A44';btnImp.style.color='#fff';
-  btnImp.style.border='none';btnImp.style.borderRadius='10px';
-  btnImp.style.fontWeight='700';btnImp.style.fontSize='.9rem';
-  btnImp.onclick=function(){
-    var txt=ta.value.trim();
-    if(!txt){showToast('❌ Collez d\'abord les données','#dc2626');return;}
-    try{
-      var data=JSON.parse(txt);
-      if(data.arts){arts=data.arts;saveLocal();}
-      if(data.posts){posts=data.posts;savePosts();}
-      if(data.messages){messages=data.messages;saveMsgs();}
-      if(data.pending){pending=data.pending;savePending();}
-      if(data.adminPass){adminPass=data.adminPass;localStorage.setItem('adminPass',adminPass);}
-      div.remove();
-      renderTable();renderPosts();renderMsgList();
-      showToast('✅ '+(data.arts?data.arts.length:0)+' artisans importés !');
-    }catch(e){showToast('❌ Données invalides','#dc2626');}
-  };
-  var btnClose=document.createElement('button');
-  btnClose.textContent='✕ Annuler';
-  btnClose.style.flex='1';btnClose.style.padding='10px';
-  btnClose.style.background='#dc2626';btnClose.style.color='#fff';
-  btnClose.style.border='none';btnClose.style.borderRadius='10px';
-  btnClose.style.fontWeight='700';btnClose.style.fontSize='.9rem';
-  btnClose.onclick=function(){div.remove();};
-  row.appendChild(btnImp);row.appendChild(btnClose);
-  box.appendChild(titre);box.appendChild(info);box.appendChild(ta);box.appendChild(row);
-  div.appendChild(box);
-  document.body.appendChild(div);
-}
-renderTable();renderPosts();renderMsgList();
+  loadFromSupabase();startMsgSync();renderTable();renderPosts();renderMsgList();
   showToast('✅ Bienvenue '+currentUser.nom+' !');
 }
 function logout(){
@@ -944,7 +793,6 @@ function logout(){
   document.getElementById('code-section').style.display='none';
   showLogin();
 }
-
 function updatePendingNotif(){var dot=document.getElementById('notif-pending');if(pending.length>0){dot.textContent=pending.length;dot.classList.add('show');document.getElementById('pending-section').style.display='block';}else{dot.classList.remove('show');document.getElementById('pending-section').style.display='none';}}
 function renderPendingList(){
   var el=document.getElementById('pending-list');
@@ -988,10 +836,7 @@ function goTab(id,btn){
   document.getElementById('tab-'+id).classList.add('active');
   if(btn)btn.classList.add('active');
   document.getElementById('app-content').scrollTop=0;
-  if(id==='stats')renderCharts();
-  if(id==='conf')renderConf();
-  if(id==='msg')renderMsgList();
-  if(id==='aide')renderAide();
+  if(id==='stats')renderCharts();if(id==='conf')renderConf();if(id==='msg')renderMsgList();if(id==='aide')renderAide();
 }
 var sigC=document.getElementById('sig'),sCtx=sigC.getContext('2d'),draw=false;
 sCtx.strokeStyle='#FF8000';sCtx.lineWidth=2;sCtx.lineCap='round';
@@ -1215,25 +1060,22 @@ function exportCSV(){
   var csv='\uFEFF'+[h].concat(rows).map(function(r){return r.map(function(v){return'"'+(v||'')+'"';}).join(',');}).join('\n');
   try{var uri='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);var lnk=document.createElement('a');lnk.href=uri;lnk.download='artisans_dabou.csv';document.body.appendChild(lnk);lnk.click();document.body.removeChild(lnk);}catch(e){}
   var old=document.getElementById('csv-popup');if(old)old.remove();
-  var div=document.createElement('div');div.id='csv-popup';div.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:5000;display:flex;align-items:center;justify-content:center;padding:16px';
+  var div=document.createElement('div');div.id='csv-popup';div.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.75);z-index:5000;display:flex;align-items:center;justify-content:center;padding:16px';
   div.innerHTML='<div style="background:#fff;border-radius:16px;padding:20px;width:100%;max-width:500px;max-height:85vh;overflow-y:auto"><h3 style="color:#FF8000;margin-bottom:8px">📋 Export CSV</h3><textarea readonly id="csv-text" style="width:100%;height:160px;font-size:.7rem;font-family:monospace;border:1.5px solid #fcd9a0;border-radius:8px;padding:8px;resize:none;background:#fff;color:#3d1f00">'+csv+'</textarea><div style="display:flex;gap:8px;margin-top:10px"><button onclick="var t=document.getElementById(\'csv-text\');t.select();t.setSelectionRange(0,99999);try{navigator.clipboard.writeText(t.value).then(function(){showToast(\'📋 Copié !\');});}catch(e){document.execCommand(\'copy\');showToast(\'📋 Copié !\');}" style="flex:1;padding:10px;background:#009A44;color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer">📋 Copier</button><button onclick="document.getElementById(\'csv-popup\').remove()" style="flex:1;padding:10px;background:#dc2626;color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer">✕</button></div></div>';
   document.body.appendChild(div);
 }
 var AIDE_DATA=[
-  {ic:'🔐',titre:'Se connecter',color:'#FF8000',etapes:['Après le splash, l\'écran de connexion apparaît automatiquement.','👑 ADMIN : email "admin@dabou.ci" + mot de passe → Connexion Admin.','🔨 ARTISAN : téléphone + code 4 chiffres → Connexion Artisan.','📝 S\'INSCRIRE : nouveau artisan remplit le formulaire. L\'admin reçoit une notification immédiate.','💾 Cochez "Se souvenir de moi" pour ne plus saisir vos identifiants.']},
-  {ic:'📋',titre:'Annuaire',color:'#3b82f6',etapes:['Affiche tous les artisans enregistrés avec leurs informations.','🔍 Barre de recherche : cherchez par nom, métier, téléphone ou adresse.','Filtrez par métier ou statut (Actif/Inactif).','➕ ADMIN : appuyez "Ajouter" pour enregistrer un nouvel artisan.','👁️ L\'œil ouvre la fiche complète de l\'artisan.','🔔 Les demandes d\'inscription s\'affichent en rouge avec boutons Approuver/Refuser.']},
-  {ic:'👤',titre:'Fiche Artisan',color:'#8b5cf6',etapes:['📞 APPELER : compose directement le numéro.','💬 WHATSAPP : ouvre WhatsApp avec message pré-rempli.','📘 FACEBOOK : ouvre l\'app Facebook.','📹 GOOGLE MEET : crée une salle de réunion vidéo.','🖨️ IMPRIMER : imprime la carte officielle.','🔗 PARTAGER : partage la fiche par WhatsApp, SMS ou email.','📲 QR CODE : génère un QR code téléchargeable.','📍 LOCALISER : ouvre Google Maps avec l\'adresse.']},
-  {ic:'📊',titre:'Statistiques',color:'#009A44',etapes:['4 graphiques générés automatiquement.','🔨 Artisans par métier.','⚧ Répartition homme/femme.','● Actif/Inactif.','👥 Apprentis par métier.']},
-  {ic:'🛍️',titre:'Vitrine',color:'#f59e0b',etapes:['✏️ Publiez vos travaux, services et tarifs.','📷 Ajoutez une photo à votre publication.','📞 Bouton de contact direct sur chaque publication.','🔍 Recherchez parmi les publications.','🗑️ Admin et artisan peuvent supprimer leurs publications.']},
-  {ic:'💬',titre:'Messagerie',color:'#ec4899',etapes:['Échangez en temps réel entre artisans et l\'admin.','Sélectionnez un artisan dans la liste pour ouvrir la conversation.','Tapez votre message et appuyez ➤ ou Entrée.','🔄 Messages synchronisés automatiquement toutes les 5 secondes.']},
-  {ic:'📹',titre:'Vidéoconférence',color:'#1a73e8',etapes:['Utilise Google Meet pour les réunions vidéo.','🏛️ "Créer salle" → Google Meet s\'ouvre dans le navigateur.','Copiez le lien et partagez-le sur WhatsApp.','🔨 Salles par métier pour échanges spécialisés.','👤 Appel individuel : salle privée pour chaque artisan.']},
-  {ic:'⬇️',titre:'Export CSV',color:'#14b8a6',etapes:['Appuyez "⬇️ CSV" pour exporter la liste complète.','Un popup s\'ouvre avec toutes les données. Appuyez "Copier".','Collez dans Excel ou Google Sheets.','Le fichier contient toutes les colonnes : noms, métiers, apprentis, contacts...']},
-  {ic:'☁️',titre:'Sauvegarde Cloud',color:'#6366f1',etapes:['Données sauvegardées sur Supabase (cloud).','✅ Changez de téléphone : données automatiquement rechargées.','✅ Réinstallez l\'app : vos artisans reviennent.','⚠️ Photos et signatures stockées localement.','🔄 Synchronisation automatique à chaque connexion.']},
-  {ic:'⚙️',titre:'Réglages',color:'#6b7280',etapes:['🔐 ADMIN : changez votre mot de passe (minimum 6 caractères).','🔑 ARTISAN : changez votre code à 4 chiffres.','👤 Vos informations de compte sont affichées.','🚪 "Se déconnecter" pour quitter la session.']}
+  {ic:'🔐',titre:'Se connecter',color:'#FF8000',etapes:['Après le splash, l\'écran de connexion apparaît.','👑 ADMIN : email "admin@dabou.ci" + mot de passe.','🔨 ARTISAN : téléphone + code 4 chiffres.','📝 S\'INSCRIRE : remplissez le formulaire, l\'admin valide.','💾 Cochez "Se souvenir de moi" pour rester connecté.']},
+  {ic:'📋',titre:'Annuaire',color:'#3b82f6',etapes:['Affiche tous les artisans enregistrés.','🔍 Recherchez par nom, métier, téléphone ou adresse.','Filtrez par métier ou statut.','➕ ADMIN : appuyez "Ajouter".','🔔 Demandes d\'inscription en rouge : Approuver/Refuser.']},
+  {ic:'👤',titre:'Fiche Artisan',color:'#8b5cf6',etapes:['📞 Appeler directement.','💬 WhatsApp avec message pré-rempli.','📹 Google Meet : réunion vidéo.','🖨️ Imprimer la carte officielle.','📲 QR Code téléchargeable.','📍 Localiser sur Google Maps.']},
+  {ic:'📊',titre:'Statistiques',color:'#009A44',etapes:['4 graphiques automatiques : métier, sexe, statut, apprentis.']},
+  {ic:'🛍️',titre:'Vitrine',color:'#f59e0b',etapes:['✏️ Publiez travaux, services et tarifs.','📞 Contact direct sur chaque publication.']},
+  {ic:'💬',titre:'Messagerie',color:'#ec4899',etapes:['Échanges en temps réel.','🔄 Synchronisation toutes les 5 secondes.']},
+  {ic:'💾',titre:'Sauvegarde',color:'#6366f1',etapes:['⬇️ Exporter : copiez le texte et sauvegardez.','⬆️ Importer : collez le texte sur la nouvelle app.','☁️ Supabase : données cloud automatiques.']}
 ];
 function renderAide(){
   var root=document.getElementById('aide-root');
-  var html='<input type="text" class="aide-search" placeholder="🔍 Rechercher dans l\'aide..." oninput="filterAide(this.value)"/>';
+  var html='<input type="text" class="aide-search" placeholder="🔍 Rechercher..." oninput="filterAide(this.value)"/>';
   html+='<div class="aide-toc"><div class="aide-toc-title">📑 Sommaire</div><div class="aide-toc-grid">';
   AIDE_DATA.forEach(function(s,i){html+='<div class="aide-toc-item" style="border-left-color:'+s.color+'" onclick="openAideSection('+i+')">'+s.ic+' '+s.titre+'</div>';});
   html+='</div></div>';
@@ -1244,13 +1086,13 @@ function renderAide(){
     s.etapes.forEach(function(e,j){html+='<div class="aide-step"><div class="aide-step-num" style="background:'+s.color+'">'+(j+1)+'</div><div class="aide-step-text">'+e+'</div></div>';});
     html+='</div></div>';
   });
-  html+='<div style="background:linear-gradient(135deg,var(--or),var(--ve));border-radius:14px;padding:16px;color:#fff;text-align:center;margin-top:4px"><div style="font-size:2rem;margin-bottom:6px">💡</div><strong>Conseil</strong><p style="font-size:.82rem;margin-top:6px;opacity:.9">En cas de problème, fermez et rouvrez l\'app. Données sauvegardées automatiquement sur le cloud.</p></div>';
   root.innerHTML=html;
 }
 function toggleAideSection(i){var body=document.getElementById('aide-body-'+i),arr=document.getElementById('aide-arr-'+i);var isOpen=body.classList.contains('open');body.classList.toggle('open');arr.textContent=isOpen?'▶':'▼';}
-function openAideSection(i){var sec=document.getElementById('aide-sec-'+i);var body=document.getElementById('aide-body-'+i),arr=document.getElementById('aide-arr-'+i);body.classList.add('open');arr.textContent='▼';setTimeout(function(){sec.scrollIntoView({behavior:'smooth',block:'start'});},100);}
+function openAideSection(i){var sec=document.getElementById('aide-sec-'+i),body=document.getElementById('aide-body-'+i),arr=document.getElementById('aide-arr-'+i);body.classList.add('open');arr.textContent='▼';setTimeout(function(){sec.scrollIntoView({behavior:'smooth',block:'start'});},100);}
 function filterAide(q){q=q.toLowerCase();AIDE_DATA.forEach(function(_,i){var sec=document.getElementById('aide-sec-'+i);sec.style.display=(!q||sec.textContent.toLowerCase().includes(q))?'block':'none';});}
+
 renderTable();renderPosts();
 </script>
 </body>
-                                                                                        </html>
+                                            </html>
