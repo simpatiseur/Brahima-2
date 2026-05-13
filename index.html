@@ -904,7 +904,41 @@ function renderTable(){
     var html='';
     for(var i=0;i<list.length;i++){
       var a=list[i],apN=(a.apprentisNoms&&a.apprentisNoms.length)?a.apprentisNoms.join(', '):'';
-      html+='<tr><td>'+(i+1)+'</td><td>'+(a.ph?'<img class="av" src="'+a.ph+'"/>':'<div class="av-ph">👤</div>')+'</td><td><strong style="color:#3d1f00">'+a.nom+'</strong></td><td><code>'+(a.imm||'—')+'</code></td><td><code>'+(a.cni||'—')+'</code></td><td>'+(a.met||'—')+'</td><td>'+(a.bra||'—')+'</td><td>'+(a.cer||'—')+'</td><td title="'+apN+'">'+(a.app||0)+(apN?' 👥':'')+'</td><td>'+(a.sex||'—')+'</td><td>'+(a.tel?'<a href="tel:'+a.tel+'" style="color:var(--ve);font-weight:600">📞</a>':'—')+'</td><td>'+(a.adr||'—')+'</td><td>'+(a.dat||'—')+'</td><td><span class="badge '+(a.sta==='Actif'?'badge-a':'badge-i')+'">'+(a.sta||'—')+'</span></td><td>'+(a.sig?'<img src="'+a.sig+'" style="height:34px;border-radius:4px"/>':'—')+'</td><td><div class="act"><button class="btn btn-ve btn-sm" onclick="openCard('+a.id+')">👁️</button>''<td><div class="act">'+
+      html += '<tr>'+
+'<td>'+(i+1)+'</td>'+
+'<td>'+
+(
+  a.ph
+  ? '<img class="av" src="'+a.ph+'"/>'
+  : '<div class="av-ph">👤</div>'
+)+
+'</td>'+
+'<td><strong style="color:#3d1f00">'+a.nom+'</strong></td>'+
+'<td><code>'+(a.imm||'—')+'</code></td>'+
+'<td><code>'+(a.cni||'—')+'</code></td>'+
+'<td>'+(a.met||'—')+'</td>'+
+'<td>'+(a.bra||'—')+'</td>'+
+'<td>'+(a.cer||'—')+'</td>'+
+'<td title="'+apN+'">'+(a.app||0)+(apN?' 👥':'')+'</td>'+
+'<td>'+(a.sex||'—')+'</td>'+
+'<td>'+
+(
+  a.tel
+  ? '<a href="tel:'+a.tel+'" style="color:var(--ve);font-weight:600">📞</a>'
+  : '—'
+)+
+'</td>'+
+'<td>'+(a.adr||'—')+'</td>'+
+'<td>'+(a.dat||'—')+'</td>'+
+'<td><span class="badge '+(a.sta==='Actif'?'badge-a':'badge-i')+'">'+(a.sta||'—')+'</span></td>'+
+'<td>'+
+(
+  a.sig
+  ? '<img src="'+a.sig+'" style="height:34px;border-radius:4px"/>'
+  : '—'
+)+
+'</td>'+
+'<td><div class="act">'+
 
 '<button class="btn btn-ve btn-sm" onclick="openCard('+a.id+')">👁️</button>'+
 
@@ -914,24 +948,15 @@ function renderTable(){
    currentUser.type==='admin' ||
    currentUser.id===a.id
  )
- ?
-
- '<button class="btn btn-or btn-sm" onclick="openForm('+a.id+')">✏️</button>'
-
+ ? '<button class="btn btn-or btn-sm" onclick="openForm('+a.id+')">✏️</button>'
  : ''
-
 )+
 
 (
  currentUser &&
  currentUser.type==='admin'
-
- ?
-
- '<button class="btn btn-ro btn-sm" onclick="delArt('+a.id+')">🗑️</button>'
-
+ ? '<button class="btn btn-ro btn-sm" onclick="delArt('+a.id+')">🗑️</button>'
  : ''
-
 )+
 
 '</div></td></tr>';
