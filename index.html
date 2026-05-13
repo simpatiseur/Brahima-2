@@ -956,16 +956,169 @@ function delPost(id){if(!confirm('Supprimer ?'))return;posts=posts.filter(functi
 function renderMsgList(){
   var listEl=document.getElementById('msg-list');
   var myId=currentUser?(String(currentUser.id||'admin')):'admin';
-  var others=currentUser&&currentUser.type==='admin'?arts:arts.filter(function(a){return String(a.id)!==myId;});
-  if(!others.length){listEl.innerHTML='<div style="padding:20px;text-align:center;color:#ccc;font-size:.82rem">Aucun artisan</div>';return;}
-  var html='';
-  others.forEach(function(a){
-    var conv=messages.filter(function(m){var f=String(m.from_id||m.from),t=String(m.to_id||m.to);return(f===myId&&t===String(a.id))||(f===String(a.id)&&t===myId);});
-    var last=conv.length?conv[conv.length-1]:null;
-    html+='<div class="msg-item'+(activeConvId===a.id?' active':'')+'" onclick="openConv('+a.id+')">'+(a.ph?'<img class="msg-av" src="'+a.ph+'"/>':'<div class="msg-av-ph">👤</div>')+'<div class="msg-info"><div class="mn">'+a.nom+'</div><div class="mm">'+(last?last.text:'Pas de message')+'</div></div></div>';
+
+  var contacts=[];
+
+  // Admin visible pour les artisans
+  if(currentUser && currentUser.type==='artisan'){
+    contacts.push({
+      id:'admin',
+      nom:'Administration',
+      met:'Chambre des Métiers',
+      ph:''
+    });
+  }
+
+  // Liste artisans
+  arts.forEach(function(a){
+    if(String(a.id)!==myId){
+      contacts.push(a);
+    }
   });
+
+  if(!contacts.length){
+    listEl.innerHTML='<div style="padding:20px;text-align:center;color:#ccc;font-size:.82rem">Aucun contact</div>';
+    return;
+  }
+
+  var html='';
+
+  contacts.forEach(function(a){
+
+    var conv=messages.filter(function(m){
+      var f=String(m.from_id||m.from);
+      var t=String(m.to_id||m.to);
+
+      return (
+        (f===myId && t===String(a.id)) ||
+        (f===String(a.id) && t===myId)
+      );
+    });
+
+    var last=conv.length?conv[conv.length-1]:null;
+
+    html+='<div class="msg-item'+
+    (String(activeConvId)===String(a.id)?' active':'')+
+    '" onclick="openConv(\''+a.id+'\')">'+
+
+    (a.ph
+      ? '<img class="msg-av" src="'+a.ph+'"/>'
+      : '<div class="msg-av-ph">👤</div>')+
+
+    '<div class="msg-info">'+
+    '<div class="mn">'+a.nom+'</div>'+
+    '<div class="mm">'+(last?last.text:'Pas de message')+'</div>'+
+    '</div></div>';
+  });
+
   listEl.innerHTML=html;
 }
+
+function openConv(artId){
+
+  activeConvId=String(artId);
+
+  var a=null;
+
+  if(String(artId)==='admin'){
+    a={nom:'Administration'};
+  }else{
+    for(var i=0;i<arts.length;i++){
+      if(String(arts[i].id)===String(artId)){
+        a=arts[i];
+        break;
+      }
+    }
+  }
+
+  renderMsgList();
+
+  var myId=currentUser?(String(currentUser.id||'admin')):'admin';
+
+  var conv=messages.filter(function(m){
+
+    var f=String(m.from_id||m.from);
+    var t=String(m.to_id||m.to);
+
+    return (
+      (f===myId && t===String(artId)) ||
+      (f===String(artId) && t===myId)
+    );
+  });
+
+  var html=conv.length
+  ? conv.map(function(m){
+      return '<div class="msg-bubble '+
+      (String(m.from_id||m.from)===myId?'sent':'recv')+
+      '">'+
+      m.text+
+      '<div class="msg-time">'+(m.time||'')+'</div></div>';
+    }).join('')
+  : '<div style="text-align:center;color:#ccc;font-size:.82rem;padding:20px">Démarrez la conversation</div>';
+
+  var chatEl=document.getElementById('msg-chat');
+
+  chatEl.innerHTML=
+  '<div class="msg-chat-header">💬 '+(a?a.nom:'Contact')+'</div>'+
+  '<div class="msg-messages" id="msg-msgs">'+html+'</div>'+
+  '<div class="msg-input-bar">'+
+  '<input type="text" id="msg-input" placeholder="Votre message..." onkeydown="if(event.key===\'Enter\')sendMsg(\''+artId+'\')"/>'+
+  '<button class="msg-send" onclick="sendMsg(\''+artId+'\')">➤</button>'+
+  '</div>';
+
+  var el=document.getElementById('msg-msgs');
+
+  if(el){
+    el.scrollTop=el.scrollHeight;
+  }
+}
+
+function sendMsg(toId){
+
+  var input=document.getElementById('msg-input');
+
+  if(!input)return;
+
+  var text=input.value.trim();
+
+  if(!text)return;
+
+  var myId=currentUser?(String(currentUser.id||'admin')):'admin';
+
+  var time=new Date().toLocaleTimeString('fr-FR',{
+    hour:'2-digit',
+    minute:'2-digit'
+  });
+
+  var msg={
+    id:Date.now(),
+    from_id:String(myId),
+    to_id:String(toId),
+    text:text,
+    time:time
+  };
+
+  messages.push(msg);
+
+  saveMsgs();
+
+  input.value='';
+
+  openConv(String(toId));
+
+  sbReq(
+    '/rest/v1/messages',
+    'POST',
+    msg,
+    {
+      'Prefer':'return=minimal'
+    }
+  ).catch(function(){
+    showToast('Message sauvegardé localement');
+  });
+
+  showToast('💬 Envoyé !');
+    }
 function openConv(artId){
   activeConvId=artId;
   var a=null;for(var i=0;i<arts.length;i++){if(arts[i].id===artId){a=arts[i];break;}}
