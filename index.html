@@ -770,7 +770,7 @@ function startApp(){
   var info=document.getElementById('account-info');
   if(currentUser.type==='admin'){info.innerHTML='<strong>Rôle:</strong> Administrateur<br/><strong>Email:</strong> admin@dabou.ci';}
   else{var a=arts.find(function(x){return x.id===currentUser.id;});if(a)info.innerHTML='<strong>Nom:</strong> '+a.nom+'<br/><strong>Métier:</strong> '+(a.met||'—')+'<br/><strong>Tél:</strong> '+(a.tel||'—');}
-  loadFromSupabase();startMsgSync();
+  loadFromSupabase();startMsgSync();function exportData(){
   var data={arts:arts,posts:posts,messages:messages,pending:pending,adminPass:adminPass};
   var json=JSON.stringify(data);
   var old=document.getElementById('csv-popup');if(old)old.remove();
@@ -1253,4 +1253,4 @@ function filterAide(q){q=q.toLowerCase();AIDE_DATA.forEach(function(_,i){var sec
 renderTable();renderPosts();
 </script>
 </body>
-      </html>
+                                                                                        </html>
