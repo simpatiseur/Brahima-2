@@ -861,24 +861,86 @@ function getApprentisNoms(){var n=parseInt(document.getElementById('f-app2').val
 function previewPh(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(ev){phData=ev.target.result;document.getElementById('pzone').innerHTML='<img src="'+phData+'" style="max-width:100%;max-height:120px;border-radius:8px"/>';};r.readAsDataURL(f);}
 function previewPostPh(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(ev){postPhData=ev.target.result;document.getElementById('post-pzone').innerHTML='<img src="'+ev.target.result+'" style="max-width:100%;max-height:150px;border-radius:8px"/>';};r.readAsDataURL(f);}
 function openForm(id){
-  if(currentUser&&currentUser.type!=='admin'){showToast('Accès admin uniquement','#dc2626');return;}
-  eid=(id!==undefined)?id:null;phData=null;
-  document.getElementById('form-title').textContent=(eid!==null)?'✏️ Modifier':'➕ Ajouter';
+
+  if(
+    currentUser &&
+    currentUser.type!=='admin' &&
+    currentUser.id!==id
+  ){
+    showToast('Accès refusé','#dc2626');
+    return;
+  }
+
+  eid=(id!==undefined)?id:null;
+  phData=null;
+
+  document.getElementById('form-title').textContent=
+    (eid!==null)?'✏️ Modifier':'➕ Ajouter';
+
   clearSig();
-  ['nom','imm','cni','met2','bra','cer','tel','adr','code'].forEach(function(k){document.getElementById('f-'+k).value='';});
-  document.getElementById('f-sex').value='';document.getElementById('f-sta2').value='Actif';
-  document.getElementById('f-app2').value='';document.getElementById('f-dat').value=new Date().toISOString().slice(0,10);
-  document.getElementById('pzone').innerHTML='📷 Choisir une photo';document.getElementById('ph-inp').value='';
+
+  ['nom','imm','cni','met2','bra','cer','tel','adr','code']
+  .forEach(function(k){
+    document.getElementById('f-'+k).value='';
+  });
+
+  document.getElementById('f-sex').value='';
+  document.getElementById('f-sta2').value='Actif';
+  document.getElementById('f-app2').value='';
+  document.getElementById('f-dat').value=
+    new Date().toISOString().slice(0,10);
+
+  document.getElementById('pzone').innerHTML='📷 Choisir une photo';
+  document.getElementById('ph-inp').value='';
   document.getElementById('apprentis-fields').innerHTML='';
+
   if(eid!==null){
-    var a=null;for(var j=0;j<arts.length;j++){if(arts[j].id===eid){a=arts[j];break;}}
+
+    var a=null;
+
+    for(var j=0;j<arts.length;j++){
+      if(arts[j].id===eid){
+        a=arts[j];
+        break;
+      }
+    }
+
     if(a){
-      document.getElementById('f-nom').value=a.nom||'';document.getElementById('f-imm').value=a.imm||'';document.getElementById('f-cni').value=a.cni||'';document.getElementById('f-met2').value=a.met||'';document.getElementById('f-bra').value=a.bra||'';document.getElementById('f-cer').value=a.cer||'';document.getElementById('f-app2').value=a.app||'';document.getElementById('f-sex').value=a.sex||'';document.getElementById('f-tel').value=a.tel||'';document.getElementById('f-adr').value=a.adr||'';document.getElementById('f-dat').value=a.dat||'';document.getElementById('f-sta2').value=a.sta||'Actif';document.getElementById('f-code').value=a.code||'';
-      if(a.ph){phData=a.ph;document.getElementById('pzone').innerHTML='<img src="'+a.ph+'" style="max-width:100%;max-height:120px;border-radius:8px"/>';}
-      if(a.sig){var img=new Image();img.onload=function(){sCtx.drawImage(img,0,0);};img.src=a.sig;}
-      if(a.app>0)updateApprentisFields();
+
+      document.getElementById('f-nom').value=a.nom||'';
+      document.getElementById('f-imm').value=a.imm||'';
+      document.getElementById('f-cni').value=a.cni||'';
+      document.getElementById('f-met2').value=a.met||'';
+      document.getElementById('f-bra').value=a.bra||'';
+      document.getElementById('f-cer').value=a.cer||'';
+      document.getElementById('f-app2').value=a.app||'';
+      document.getElementById('f-sex').value=a.sex||'';
+      document.getElementById('f-tel').value=a.tel||'';
+      document.getElementById('f-adr').value=a.adr||'';
+      document.getElementById('f-dat').value=a.dat||'';
+      document.getElementById('f-sta2').value=a.sta||'Actif';
+      document.getElementById('f-code').value=a.code||'';
+
+      if(a.ph){
+        phData=a.ph;
+        document.getElementById('pzone').innerHTML=
+          '<img src="'+a.ph+'" style="max-width:100%;max-height:120px;border-radius:8px"/>';
+      }
+
+      if(a.sig){
+        var img=new Image();
+        img.onload=function(){
+          sCtx.drawImage(img,0,0);
+        };
+        img.src=a.sig;
+      }
+
+      if(a.app>0){
+        updateApprentisFields();
+      }
     }
   }
+
   document.getElementById('modal-art').classList.add('open');
 }
 function closeForm(){document.getElementById('modal-art').classList.remove('open');}
