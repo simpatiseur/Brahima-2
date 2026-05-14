@@ -312,6 +312,7 @@ canvas{border:1.5px solid #fcd9a0;border-radius:8px;width:100%;cursor:crosshair;
     <button class="nav-tab" onclick="goTab('conf',this)"><span class="ti">📹</span>Conf.</button>
     <button class="nav-tab" onclick="goTab('settings',this)"><span class="ti">⚙️</span>Réglages</button>
     <button class="nav-tab" onclick="goTab('aide',this)"><span class="ti">❓</span>Aide</button>
+    <button class="nav-tab" onclick="actualiserApp()" style="min-width:48px"><span class="ti">🔄</span>Sync</button>
   </nav>
   <div class="app-content" id="app-content">
     <div class="section active" id="tab-annuaire">
@@ -608,15 +609,39 @@ function loadFromSupabase(){
   });
 }
 
+function actualiserApp(){
+  showToast('🔄 Actualisation...');
+  loadFromSupabase();
+  if(navigator.vibrate)navigator.vibrate(100);
+}
+
 function normalizeMsgs(data){return data.map(function(m){return{id:m.id,from_id:String(m.from_id||m.from||''),to_id:String(m.to_id||m.to||''),text:m.text||'',time:m.time||''};});}
+function notifyNewMsg(newMsgs,myId){
+  // Trouver les nouveaux messages reçus (pas envoyés par moi)
+  var myOldIds=messages.map(function(m){return m.id;});
+  var newReceived=newMsgs.filter(function(m){return myOldIds.indexOf(m.id)===-1&&String(m.to_id)===myId;});
+  if(newReceived.length===0)return;
+  // Vibration
+  if(navigator.vibrate)navigator.vibrate([150,80,150]);
+  // Son notification
+  try{var ctx=new(window.AudioContext||window.webkitAudioContext)();var o=ctx.createOscillator();var g=ctx.createGain();o.connect(g);g.connect(ctx.destination);o.frequency.value=880;g.gain.setValueAtTime(0.3,ctx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.4);o.start(ctx.currentTime);o.stop(ctx.currentTime+0.4);}catch(e){}
+  // Bannière notification
+  var sender=newReceived[newReceived.length-1];
+  var senderName='';
+  if(sender.from_id==='admin'){senderName='👑 Administrateur';}
+  else{for(var i=0;i<arts.length;i++){if(String(arts[i].id)===String(sender.from_id)){senderName=arts[i].nom;break;}}if(!senderName)senderName='Un artisan';}
+  showNotifBanner('💬 Nouveau message de '+senderName+' : '+sender.text.substring(0,30)+(sender.text.length>30?'...':''));
+}
+
 function startMsgSync(){
   if(msgInterval)clearInterval(msgInterval);
   msgInterval=setInterval(function(){
     sbReq('/rest/v1/messages?order=id.asc').then(function(data){
       if(data&&Array.isArray(data)){
         var norm=normalizeMsgs(data);
-        // Toujours mettre à jour si Supabase a des messages différents
         if(norm.length!==messages.length||JSON.stringify(norm)!==JSON.stringify(messages)){
+          var myId=getMyId();
+          notifyNewMsg(norm,myId);
           messages=norm;saveMsgs();renderMsgList();if(activeConvId!==null)openConv(activeConvId);
         }
       }
