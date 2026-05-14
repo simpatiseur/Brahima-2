@@ -956,8 +956,8 @@ function sendMsg(toId){
   // On stocke localement avec from_id/to_id
   var msg={id:Date.now(),from_id:myId,to_id:String(toId),text:text,time:time};
   messages.push(msg);saveMsgs();input.value='';openConv(toId);
-  // On envoie à Supabase avec les DEUX variantes de noms de colonnes pour compatibilité
-  var sbMsg={id:msg.id,from_id:myId,to_id:String(toId),from:myId,to:String(toId),text:text,time:time};
+  // On envoie à Supabase uniquement avec from_id et to_id
+  var sbMsg={id:msg.id,from_id:myId,to_id:String(toId),text:text,time:time};
   sbReq('/rest/v1/messages','POST',sbMsg,{'Prefer':'return=minimal'}).then(function(res){
     if(res&&res.message){showToast('❌ Erreur envoi: '+res.message,'#dc2626');}
     else{showToast('💬 Envoyé !');
