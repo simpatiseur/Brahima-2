@@ -604,15 +604,16 @@ function loadFromSupabase(){
     }
   });
   sbReq('/rest/v1/messages?order=id.asc').then(function(data){
-    if(data&&Array.isArray(data)&&data.length>0){messages=data;saveMsgs();renderMsgList();if(activeConvId!==null)openConv(activeConvId);}
+    if(data&&Array.isArray(data)&&data.length>0){messages=normalizeMsgs(data);saveMsgs();renderMsgList();if(activeConvId!==null)openConv(activeConvId);}
   });
 }
 
+function normalizeMsgs(data){return data.map(function(m){return{id:m.id,from_id:String(m.from_id||m.from||''),to_id:String(m.to_id||m.to||''),text:m.text||'',time:m.time||''};});}
 function startMsgSync(){
   if(msgInterval)clearInterval(msgInterval);
   msgInterval=setInterval(function(){
     sbReq('/rest/v1/messages?order=id.asc').then(function(data){
-      if(data&&Array.isArray(data)&&data.length>messages.length){messages=data;saveMsgs();renderMsgList();if(activeConvId!==null)openConv(activeConvId);}
+      if(data&&Array.isArray(data)&&data.length>0){var norm=normalizeMsgs(data);if(JSON.stringify(norm)!==JSON.stringify(messages)){messages=norm;saveMsgs();renderMsgList();if(activeConvId!==null)openConv(activeConvId);}}
     });
     if(currentUser&&currentUser.type==='admin'){
       sbReq('/rest/v1/pending_artisans').then(function(data){
@@ -952,9 +953,20 @@ function sendMsg(toId){
   var text=input.value.trim();if(!text)return;
   var myId=getMyId();
   var time=new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+  // On stocke localement avec from_id/to_id
   var msg={id:Date.now(),from_id:myId,to_id:String(toId),text:text,time:time};
   messages.push(msg);saveMsgs();input.value='';openConv(toId);
-  sbReq('/rest/v1/messages','POST',msg,{'Prefer':'return=minimal'}).then(function(){showToast('💬 Envoyé !');});
+  // On envoie à Supabase avec les DEUX variantes de noms de colonnes pour compatibilité
+  var sbMsg={id:msg.id,from_id:myId,to_id:String(toId),from:myId,to:String(toId),text:text,time:time};
+  sbReq('/rest/v1/messages','POST',sbMsg,{'Prefer':'return=minimal'}).then(function(res){
+    if(res&&res.message){showToast('❌ Erreur envoi: '+res.message,'#dc2626');}
+    else{showToast('💬 Envoyé !');
+      // Resynchroniser immédiatement après envoi
+      sbReq('/rest/v1/messages?order=id.asc').then(function(data){
+        if(data&&Array.isArray(data)&&data.length>0){messages=normalizeMsgs(data);saveMsgs();renderMsgList();if(activeConvId!==null)openConv(activeConvId);}
+      });
+    }
+  }).catch(function(e){showToast('❌ Erreur réseau','#dc2626');});
 }
 /* ===== FIN MESSAGERIE ===== */
 
