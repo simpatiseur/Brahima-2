@@ -613,7 +613,13 @@ function startMsgSync(){
   if(msgInterval)clearInterval(msgInterval);
   msgInterval=setInterval(function(){
     sbReq('/rest/v1/messages?order=id.asc').then(function(data){
-      if(data&&Array.isArray(data)&&data.length>0){var norm=normalizeMsgs(data);if(JSON.stringify(norm)!==JSON.stringify(messages)){messages=norm;saveMsgs();renderMsgList();if(activeConvId!==null)openConv(activeConvId);}}
+      if(data&&Array.isArray(data)){
+        var norm=normalizeMsgs(data);
+        // Toujours mettre à jour si Supabase a des messages différents
+        if(norm.length!==messages.length||JSON.stringify(norm)!==JSON.stringify(messages)){
+          messages=norm;saveMsgs();renderMsgList();if(activeConvId!==null)openConv(activeConvId);
+        }
+      }
     });
     if(currentUser&&currentUser.type==='admin'){
       sbReq('/rest/v1/pending_artisans').then(function(data){
@@ -624,7 +630,7 @@ function startMsgSync(){
         }
       });
     }
-  },5000);
+  },3000);
 }
 
 var SPLASH=[{url:'mecanicien.jpg',m:'MÉCANICIEN'},{url:'electricien.jpg',m:'ÉLECTRICIEN'},{url:'coiffeur.jpg',m:'COIFFEUR'},{url:'tisserand.jpg',m:'TISSERAND'},{url:'cordonnier.jpg',m:'CORDONNIER'},{url:'potier.jpg',m:'POTIER'}];
