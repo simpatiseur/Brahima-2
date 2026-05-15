@@ -584,13 +584,12 @@ function loadFromSupabase(){
   showSync(true);
   sbReq('/rest/v1/artisans?order=nom.asc').then(function(data){
     if(data&&Array.isArray(data)&&data.length>0){
-      data.forEach(function(sb){
+      // Supabase est la source principale
+      arts=data.map(function(sb){
         var local=null;for(var i=0;i<arts.length;i++){if(String(arts[i].id)===String(sb.id)){local=arts[i];break;}}
-        var merged={id:parseInt(sb.id)||sb.id,nom:sb.nom||'',imm:sb.imm||'',cni:sb.cni||'',met:sb.met||'',bra:sb.bra||'',cer:sb.cer||'',app:sb.app||0,sex:sb.sex||'',tel:sb.tel||'',adr:sb.adr||'',dat:sb.dat||'',sta:sb.sta||'Actif',code:sb.code||'',apprentisNoms:sb.apprentis_noms?JSON.parse(sb.apprentis_noms):[],ph:local?(local.ph||''):'',sig:local?(local.sig||''):''};
-        var idx=-1;for(var j=0;j<arts.length;j++){if(String(arts[j].id)===String(sb.id)){idx=j;break;}}
-        if(idx>-1)arts[idx]=merged;else arts.push(merged);
+        return {id:parseInt(sb.id)||sb.id,nom:sb.nom||'',imm:sb.imm||'',cni:sb.cni||'',met:sb.met||'',bra:sb.bra||'',cer:sb.cer||'',app:sb.app||0,sex:sb.sex||'',tel:sb.tel||'',adr:sb.adr||'',dat:sb.dat||'',sta:sb.sta||'Actif',code:sb.code||'',apprentisNoms:sb.apprentis_noms?JSON.parse(sb.apprentis_noms):[],ph:local?(local.ph||''):'',sig:local?(local.sig||''):''};
       });
-      saveLocal();renderTable();showToast('☁️ Données synchronisées !');
+      saveLocal();renderTable();showToast('☁️ '+arts.length+' artisans synchronisés !');
     }
     showSync(false);
   });
