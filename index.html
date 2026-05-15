@@ -582,7 +582,7 @@ function importData(){
 
 function loadFromSupabase(){
   showSync(true);
-  sbReq('/rest/v1/artisans?order=nom.asc').then(function(data){
+  sbReq('/rest/v1/artisans?order=nom.asc&limit=1000').then(function(data){
     if(data&&Array.isArray(data)&&data.length>0){
       // Supabase est la source principale
       arts=data.map(function(sb){
