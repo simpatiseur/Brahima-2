@@ -525,6 +525,14 @@ var posts=JSON.parse(localStorage.getItem('posts')||'[]');
 var messages=JSON.parse(localStorage.getItem('messages')||'[]');
 var pending=JSON.parse(localStorage.getItem('pending')||'[]');
 var adminPass=localStorage.getItem('adminPass')||'admin123';
+function loadAdminPass(){
+  sbReq('/rest/v1/config?cle=eq.adminPass').then(function(data){
+    if(data&&Array.isArray(data)&&data.length>0&&data[0].valeur){
+      adminPass=data[0].valeur;
+      localStorage.setItem('adminPass',adminPass);
+    }
+  });
+}
 var currentUser=null,eid=null,phData=null,postPhData=null;
 var currentCardId=null,activeConvId=null,myCharts={},msgInterval=null;
 
@@ -745,7 +753,7 @@ function startApp(){
   var info=document.getElementById('account-info');
   if(currentUser.type==='admin')info.innerHTML='<strong>Rôle:</strong> Administrateur<br/><strong>Email:</strong> admin@dabou.ci';
   else{var a=arts.find(function(x){return x.id===currentUser.id;});if(a)info.innerHTML='<strong>Nom:</strong> '+a.nom+'<br/><strong>Métier:</strong> '+(a.met||'—')+'<br/><strong>Tél:</strong> '+(a.tel||'—');}
-  loadFromSupabase();startMsgSync();renderTable();renderPosts();renderMsgList();
+  loadFromSupabase();loadAdminPass();startMsgSync();renderTable();renderPosts();renderMsgList();
   showToast('✅ Bienvenue '+currentUser.nom+' !');
 }
 function logout(){
@@ -781,7 +789,7 @@ function changePassword(){
   if(old!==adminPass){showToast('Mot de passe actuel incorrect','#dc2626');return;}
   if(nw.length<6){showToast('Minimum 6 caractères','#dc2626');return;}
   if(nw!==conf){showToast('Les mots de passe ne correspondent pas','#dc2626');return;}
-  adminPass=nw;localStorage.setItem('adminPass',adminPass);
+  adminPass=nw;localStorage.setItem('adminPass',adminPass);  sbReq('/rest/v1/config?cle=eq.adminPass','PATCH',{valeur:adminPass});
   document.getElementById('pwd-old').value='';document.getElementById('pwd-new').value='';document.getElementById('pwd-confirm').value='';
   showToast('✅ Mot de passe changé !');
 }
