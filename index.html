@@ -2,6 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8"/>
+  <link rel="manifest" href="manifest.json">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
 <meta name="color-scheme" content="light"/>
 <title>Chambre de Métiers de Dabou</title>
@@ -1115,6 +1116,13 @@ function openAideSection(i){var sec=document.getElementById('aide-sec-'+i),body=
 function filterAide(q){q=q.toLowerCase();AIDE_DATA.forEach(function(_,i){var sec=document.getElementById('aide-sec-'+i);sec.style.display=(!q||sec.textContent.toLowerCase().includes(q))?'block':'none';});}
 
 renderTable();renderPosts();
+  if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("service-worker.js")
+      .then(reg => console.log("Service Worker OK:", reg.scope))
+      .catch(err => console.log("Service Worker erreur:", err));
+  });
+  }
 </script>
 </body>
 </html>
